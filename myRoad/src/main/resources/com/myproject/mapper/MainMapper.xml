@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.myproject.mapper.MainMapper">
+	<!-- Main 경로 목록  -->
+	<select id="getList" resultType="com.myproject.domain.TrailVO">
+		SELECT *  FROM tbl_trail
+	</select>
+	
+	<!--Trail 등록 후 key가져오기  -->
+	<insert id="trailInsertSelectKey">
+		<selectKey keyProperty="trailNo" order="BEFORE" resultType="long">
+			select seq_trail.nextval from dual
+		</selectKey>
+			insert into tbl_trail
+	    		(
+	    		userno,		<!-- 회원번호 -->
+	     		trailno,	<!-- 코스번호 -->
+	     		title,		<!-- 제목 -->
+	     		thumnail,	<!-- 섬네일유무 -->
+	     		contents,	<!-- 내용 -->
+	     		startlat,	<!-- 출발위도 -->
+	     		startlng,	<!-- 출발경도 -->
+	     		endlat,		<!-- 도착위도 -->
+	     		endlng,		<!-- 도착경도 -->
+	     		regdate,	<!-- 등록일자 -->
+	     		updatedate	<!-- 수정일자 -->
+	     		)
+			values
+	    		(#{userNo},		<!-- 회원번호 -->
+	    		 #{trailNo},	<!-- 코스번호 -->
+	    		 #{title},		<!-- 제목 -->
+	    		 #{thumnail},	<!-- 섬네일유무 -->
+	    		 #{contents},	<!-- 내용 -->
+	    		 #{startLat},	<!-- 출발위도 -->
+	    		 #{startLng},	<!-- 출발경도 -->
+	    		 #{endLat},		<!-- 도착위도 -->
+	    		 #{endLng},		<!-- 도착경도 -->
+	    		 sysdate,		<!-- 등록일자 -->
+	    		 sysdate		<!-- 수정일자 -->
+	    		 )		
+	</insert>
+
+</mapper>
