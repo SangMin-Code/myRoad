@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.myproject.service.MainServiceTests;
+import com.myproject.service.TrailServiceTests;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @ContextConfiguration({"file:src/main/webapp/WEB-INF/spring/root-context.xml",
 	"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
 @Slf4j
-public class MainControllerTests {
+public class TrailControllerTests {
 	
 	@Setter(onMethod_ = {@Autowired})
 	private WebApplicationContext ctx;
@@ -35,7 +35,7 @@ public class MainControllerTests {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
 	
-	@Test
+	//@Test
 	public void testMain() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/trail/main"))
 		.andReturn()
@@ -43,6 +43,21 @@ public class MainControllerTests {
 		.getModelMap();
 	}
 	
+	@Test
+	public void testRegister() throws Exception{
+		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/trail/register")
+				.param("userNo", "1")
+				.param("title","test Title")
+				.param("contents", "test Contents")
+				.param("thumnail", "0")
+				.param("startLat", "33.450450810177195d")
+				.param("startLng","126.57138305595264d")
+				.param("endLat", "33.45170405221839d")
+				.param("endLng", "126.57138764645934d"))
+				.andReturn().getModelAndView().getViewName();
+		log.info(resultPage);
+		
+	}
 	
 
 }

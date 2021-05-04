@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.myproject.domain.TrailVO;
 
-public interface MainMapper {
+public interface TrailMapper {
 	//Main Trail 목록
 	public List<TrailVO> getList();
 	
 	//Main Trail 등록
-	public void trailInsertSelectKey(TrailVO trail);
+	public Long trailInsertSelectKey(TrailVO trail);
 }

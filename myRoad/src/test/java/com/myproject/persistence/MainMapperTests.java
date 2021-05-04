@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.myproject.domain.TrailVO;
-import com.myproject.mapper.MainMapper;
+import com.myproject.mapper.TrailMapper;
 import com.myproject.mapper.SampleMapper;
 
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class MainMapperTests {
 	private SampleMapper mapper;
 	
 	@Setter(onMethod_=@Autowired)
-	private MainMapper mainMapper;
+	private TrailMapper mainMapper;
 	
 	//@Test
 	public void testGetTime() {
