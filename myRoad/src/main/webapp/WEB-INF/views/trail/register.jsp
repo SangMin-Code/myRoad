@@ -30,37 +30,42 @@
 							<div class= "card shadow mb-4">
                         <div class="card-header py-3">
                             <h7 class= "m-0 font-weight-bold text-primary">Make Trail</h7>
-                        </div>
-                        <div>
-	                        <button id="addLine"class="btn btn-success">
-	                            경로 추가
-	                        </button>
-	                        <button id="addMarker"class="btn btn-success">
+							<button id="addMarker"class="btn btn-success float-right mr-1">
 	                            마커 추가
+	                        </button>
+                            <button id="addLine"class="btn btn-success float-right mr-1">
+	                            경로 추가
 	                        </button>
                         </div>
                         <div class="card-body">
-                            <div id="map" style="width:80%;height:350px;"></div>  
+                            <div id="map" style="width:100%;height:600px;"></div>  
                         </div>
                     </div>						
 					</div> <!--div left box-->
 						<div class="col-xl-4 col-lg-5"> <!--right box-->
-                    		<!-- 마커 정보 -->
+                    		<!-- 스팟 정보 -->
 							<div class="card shadow mb-4">
 								<div class="card-header py-3" >
 									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">스팟 정보</h6>
 								</div>
 								<div class="card-body">
-									<form role ="form" action="/" method="post">
+									<form role ="marker_form" method="post">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <div class="form-group">
                                             <label>Title</label>
-                                            <input class ="form-control" name="title">
+                                            <input class ="form-control" id="markerTitle">
                                         </div>
                                         <div class="form-group">
                                             <label>Text area</label>
-                                            <textarea class ="form-control" rows="3" name='content'></textarea>
+                                            <textarea class ="form-control" rows="3" id='markerContent'></textarea>
                                         </div>
+                                        <button type="button" class="btn btn-success" id="markerSaveBtn">
+                            				스팟저장
+		                            	</button>
+		                            	<button type="button" class="btn btn-danger" id="markerDelBtn">
+		                            		스팟삭제
+		                            	</button>
+		                            	<input type="hidden" id="markerIdx" value="0"/>
                                     </form> 
 								</div>
 							</div>
@@ -124,7 +129,7 @@
                             	</div>
                             	<div class="form-group">
                             		<label>내용</label>
-                            		<textarea class ="form-control" rows="3" name='contents'></textarea>
+                            		<textarea class ="form-control" rows="3" name='content'></textarea>
                             	</div>
                             	<button type="submit" class="btn btn-success">
                             		Submit button
@@ -162,23 +167,75 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     };
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
+var markers = [] //마커 배열
+
+var markerIdx = 1  //마커 구분을 위한 인덱스
+
 // 마커 생성
 function makeMarker(mouseEvent){
+	
         // 클릭한 위도, 경도 정보를 가져옵니다 
         var latlng = mouseEvent.latLng; 
         
         // 지도를 클릭한 위치에 표출할 마커입니다
         var marker = new kakao.maps.Marker({ 
         // 지도 중심좌표에 마커를 생성합니다 
-        position: latlng 
+        position: latlng,
+        clickable:true,
+        title:markerIdx
         }); 
+       	
+        var data = {lat:latlng.getLat(),
+        			lng:latlng.getLng(),
+        			title:"hello",
+        			content:"it's me"+markerIdx,
+        			markerNo:-1       			
+        			}
+        markerIdx++;
+        
+        markers.push({"data":data,"marker":marker})    
+        
+        //마커 왼쪽 클릭 시 스팟 정보 뿌리기
+        kakao.maps.event.addListener(marker, 'click', function() {
+        	for (var i = 0; i < markers.length; i ++) {
+        		if (markers[i].marker.getTitle()==marker.getTitle()){
+        			$("#markerTitle").val(markers[i].data.title)
+        			$("#markerContent").val(markers[i].data.content)
+        			$("#markerIdx").val(marker.getTitle())
+        		}
+        	}
+      	});
+        
+        //마커 오른족 클릭 시 마커 삭제
+		kakao.maps.event.addListener(marker, 'rightclick', function() {
+			
+			var d_idx = 0			
+			
+        	for (var i = 0; i < markers.length; i ++) {
+        		if (markers[i].marker.getTitle()==marker.getTitle()){
+        			d_idx=i
+      				break
+        		}
+        	}
+			markers[d_idx].marker.setMap(null)
+        	markers.splice(d_idx,1)
+        	
+        	$("#markerTilte").val(null)
+        	$("#markerContent").val(null)
+        	$("#markerIdx").val(null)
+        	
+        	
+      	});
+        
         // 지도에 마커를 표시합니다
         marker.setMap(map);
     
-        var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+        /* var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
         message += '경도는 ' + latlng.getLng() + ' 입니다';
-
-        console.log(message)  
+        
+        console.log(message) */
+        
+       
     }
 
 // 선 생성
@@ -527,26 +584,72 @@ $(document).ready(function(e){
         kakao.maps.event.removeListener(map, 'rightclick', makeLineRightClick) 
         kakao.maps.event.addListener(map, 'click', makeMarker);
     })
-
+    
+    //스팟 저장
+    $("#markerSaveBtn").on("click",function(e){
+    	
+    	if($("#markerIdx").val()==0 || $("#markerIdx").val()==null || $("#markerIdx").val()==""){
+    		alert("마커를 선택해주세요.")
+    		return
+    	}
+    	
+    	idx = $("#markerIdx").val()   	
+    	for(var i=0; i<markers.length; i++){
+    		if(markers[i].marker.getTitle()==idx){
+    			markers[i].data.title = $("#markerTitle").val()
+    			markers[i].data.content = $("#markerContent").val()
+    			break
+    		}    			
+    	}
+    	
+    	
+    });
+    
+    //스팟 삭제
+     $("#markerDelBtn").on("click",function(e){
+    	console.log($("#markerIdx").val())
+    	 
+    	if($("#markerIdx").val()==0 || $("#markerIdx").val()==null || $("#markerIdx").val()==""){
+    		alert("마커를 선택해주세요.")
+    		return
+    	}
+    	 
+    	var d_idx = $("#markerIdx").val()			
+			
+       	for (var i = 0; i < markers.length; i ++) {
+       		if (markers[i].marker.getTitle()==d_idx){
+       			d_idx=i
+     				break
+       		}
+       	}
+		markers[d_idx].marker.setMap(null)
+       	markers.splice(d_idx,1)
+       	
+       	$("#markerTilte").val(null)
+       	$("#markerContent").val(null)
+       	$("#markerIdx").val(null)
+    	    	
+    });
+    
 
     $("button[type='submit']").on("click",function(e){
         e.preventDefault();
-        formObj.submit();
-        // console.log("submit clicked");
-
-        // var str ="";
-
-        // $(".uploadResult ul li").each(function(i,obj){
-        //     var jobj = $(obj);
-        //     console.dir(jobj);
-        //     str += "<input type = 'hidden' name = 'attachList["+i+"].fileName' value = '"+jobj.data("filename")+"'>"; 
-        //     str += "<input type = 'hidden' name = 'attachList["+i+"].uuid' value = '"+jobj.data("uuid")+"'>";
-        //     str += "<input type = 'hidden' name = 'attachList["+i+"].uploadPath' value = '"+jobj.data("path")+"'>";
-        //     str += "<input type = 'hidden' name = 'attachList["+i+"].fileType' value = '"+jobj.data("type")+"'>";
-        // })
         
-        //console.log(str)
-        //formObj.append(str).submit();
+         console.log("submit clicked");
+
+         var str ="";
+
+         
+         for (var i =0; i<markers.length; i++){
+        	 data = markers[i].data
+             str += "<input type = 'hidden' name = 'markerList["+i+"].title' value = '"+data.title+"'>"; 
+             str += "<input type = 'hidden' name = 'markerList["+i+"].content' value = '"+data.content+"'>";
+             str += "<input type = 'hidden' name = 'markerList["+i+"].lat' value = '"+data.lat+"'>";
+             str += "<input type = 'hidden' name = 'markerList["+i+"].lng' value = '"+data.lng+"'>";
+         }
+        
+        console.log(str)
+        formObj.append(str).submit();
     })
 
     $("input[type='file']").change(function(e){

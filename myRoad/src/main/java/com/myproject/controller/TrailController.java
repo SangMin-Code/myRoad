@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myproject.domain.TrailVO;
+import com.myproject.service.MarkerService;
 import com.myproject.service.TrailService;
 
 import lombok.AllArgsConstructor;
@@ -20,14 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 public class TrailController {
 	
 	private TrailService trailService;
+	private MarkerService markerService;
 	
 	@GetMapping("/main")
 	public void main(Model model) {
 		log.info("main");
 		
 		model.addAttribute("trail",trailService.getTrailList());
-		
-		
+				
 		
 	}
 	
@@ -45,7 +46,7 @@ public class TrailController {
 		log.info("register: "+trail);
 		
 		Long trailSeq =trailService.insertSelectKeyTrail(trail);
-		
+				
 		rttr.addFlashAttribute("result", trailSeq);
 		
 		return "redirect:/trail/main";

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -48,7 +49,7 @@ public class TrailControllerTests {
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/trail/register")
 				.param("userNo", "1")
 				.param("title","test Title")
-				.param("contents", "test Contents")
+				.param("content", "test Contents")
 				.param("thumnail", "0")
 				.param("startLat", "33.450450810177195d")
 				.param("startLng","126.57138305595264d")

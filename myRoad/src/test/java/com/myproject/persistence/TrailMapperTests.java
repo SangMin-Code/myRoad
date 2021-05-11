@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
 @Log4j
-public class MainMapperTests {
+public class TrailMapperTests {
 	
 	@Setter(onMethod_=@Autowired)
 	private SampleMapper mapper;
@@ -44,7 +44,7 @@ public class MainMapperTests {
 		trail.setUserNo(1L);
 		trail.setTitle("select key test");
 		trail.setThumnail("0");
-		trail.setContents("select key test contests");
+		trail.setContent("select key test contests");
 		trail.setStartLat(37.566826D);
 		trail.setStartLng(126.978656D);
 		trail.setEndLat(37.566828D);

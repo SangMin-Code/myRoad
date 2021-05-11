@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.myproject.mapper.MarkerMapper">
+	
+	<!--Marker 등록  -->
+	<insert id="markerInsert">
+			insert into tbl_marker
+	    		(
+	     		trailno,	<!-- 코스번호 -->
+	     		markerno,   <!-- 마커번호 -->
+	     		title,		<!-- 제목 -->
+	     		content,	<!-- 내용 -->
+	     		lat,		<!-- 출발위도 -->
+	     		lng,		<!-- 출발경도 -->
+	     		regdate,	<!-- 등록일자 -->
+	     		updatedate	<!-- 수정일자 -->
+	     		)
+			values
+	    		(
+	    		 #{trailNo},		<!-- 코스번호 -->
+	    		 seq_marker.nextval,<!-- 마커번호 -->	
+	    		 #{title},			<!-- 제목 -->
+	    		 #{content},		<!-- 내용 -->
+	    		 #{lat},			<!-- 출발위도 -->
+	    		 #{lng},			<!-- 출발경도 -->
+	    		 sysdate,			<!-- 등록일자 -->
+	    		 sysdate			<!-- 수정일자 -->
+	    		 )		
+	</insert>
+
+</mapper>

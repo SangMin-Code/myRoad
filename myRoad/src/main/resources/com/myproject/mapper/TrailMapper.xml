@@ -20,7 +20,7 @@
 	     		trailno,	<!-- 코스번호 -->
 	     		title,		<!-- 제목 -->
 	     		thumnail,	<!-- 섬네일유무 -->
-	     		contents,	<!-- 내용 -->
+	     		content,	<!-- 내용 -->
 	     		startlat,	<!-- 출발위도 -->
 	     		startlng,	<!-- 출발경도 -->
 	     		endlat,		<!-- 도착위도 -->
@@ -33,7 +33,7 @@
 	    		 #{trailNo},	<!-- 코스번호 -->
 	    		 #{title},		<!-- 제목 -->
 	    		 #{thumnail},	<!-- 섬네일유무 -->
-	    		 #{contents},	<!-- 내용 -->
+	    		 #{content},	<!-- 내용 -->
 	    		 #{startLat},	<!-- 출발위도 -->
 	    		 #{startLng},	<!-- 출발경도 -->
 	    		 #{endLat},		<!-- 도착위도 -->
