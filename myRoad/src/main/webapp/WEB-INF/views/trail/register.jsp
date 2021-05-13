@@ -6,16 +6,6 @@
 
 <%@include file ="/WEB-INF/views/includes/header.jsp" %>
 
-<style>
-.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
-.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
-.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
-.number {font-weight:bold;color:#ee6152;}
-.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
-.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
-.distanceInfo .label {display:inline-block;width:50px;}
-.distanceInfo:after {content:none;}
-</style>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -25,7 +15,7 @@
 					
 					<!-- map -->                   
                     <div class="row">
-						<div class="col-xl-8 col-lg-7"> <!--left box-->
+						<div class="col-xl-6 col-lg-7"> <!--left box-->
                     		<!-- 주변 코스 목록 -->
 							<div class= "card shadow mb-4">
                         <div class="card-header py-3">
@@ -38,15 +28,15 @@
 	                        </button>
                         </div>
                         <div class="card-body">
-                            <div id="map" style="width:100%;height:600px;"></div>  
+                            <div id="map" style="width:100%;height:730px;"></div>  
                         </div>
                     </div>						
 					</div> <!--div left box-->
-						<div class="col-xl-4 col-lg-5"> <!--right box-->
+						<div class="col-xl-5 col-lg-5"> <!--right box-->
                     		<!-- 스팟 정보 -->
 							<div class="card shadow mb-4">
 								<div class="card-header py-3" >
-									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">스팟 정보</h6>
+									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">마커 정보</h6>
 								</div>
 								<div class="card-body">
 									<form role ="marker_form" method="post">
@@ -60,50 +50,29 @@
                                             <textarea class ="form-control" rows="3" id='markerContent'></textarea>
                                         </div>
                                         <button type="button" class="btn btn-success" id="markerSaveBtn">
-                            				스팟저장
+                            				마커저장
 		                            	</button>
 		                            	<button type="button" class="btn btn-danger" id="markerDelBtn">
-		                            		스팟삭제
+		                            		마커삭제
 		                            	</button>
 		                            	<input type="hidden" id="markerIdx" value="0"/>
                                     </form> 
 								</div>
 							</div>
-							<!--스팟 정보 (text, img) 스팟정보 양식필요-->
-							<div class="card shadow mb-4">
+							<!--마커 갤러리-->
+							<div class="card shadow mb-4" >
 								<div class="card-header py-3" >
 									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">갤러리</h6>
 								</div>
-								<div class="card-body">
-									<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-indicators">
-                                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                        </div>
-
-                                        <div class="carousel-inner">
-                                          <div class="carousel-item active">
-                                            <img src="/resources/img/undraw_posting_photo.svg" class="d-block w-100" alt="...">
-                                          </div>
-                                          <div class="carousel-item">
-                                            <img src="/resources/img/undraw_posting_photo.svg" class="d-block w-100" alt="...">
-                                          </div>
-                                          <div class="carousel-item">
-                                            <img src="/resources/img/undraw_posting_photo.svg" class="d-block w-100" alt="...">
-                                          </div>
-                                        </div>
-
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Next</span>
-                                        </button>
-                                      </div>
-								</div>
+								<div class="card-body" style="overflow:auto; height:400px">
+		                            <div class="input-group">
+		                                <input type="file" class = "form-control p-1" name='uploadFile' multiple>
+		                            </div>
+		                            <div class ="uploadResult">
+		                                <ul class="list-group">
+		                                </ul>
+		                            </div>
+                        		</div>
 							</div>
 						</div> <!--div right box-->
 					</div> <!--div row-->
@@ -122,7 +91,6 @@
                                 <input type="hidden" name="endLng" value="126.57138764645934"/>
                                 <input type="hidden" name="thumnail" value="0"/>
                                 
-
                                 <div class="form-group">
                             		<label>제목</label>
                             		<input class ="form-control" name="title">
@@ -138,21 +106,6 @@
                             		Reset Button
                             	</button>
                             </form> 
-                        </div>
-                    </div>
-                    <div class= "card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h7 class= "m-0 font-weight-bold text-primary">File Attach</h7>
-                        </div>
-                        <div class="card-body">
-                            <div class="input-group">
-                                <input type="file" class = "form-control p-1" name='uploadFile' multiple>
-                            </div>
-                            <div class ="uploadResult">
-                                <ul class="list-group">
-                                    
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,7 +142,7 @@ function makeMarker(mouseEvent){
         			lng:latlng.getLng(),
         			title:"hello",
         			content:"it's me"+markerIdx,
-        			markerNo:-1       			
+        			markerNo:-1 
         			}
         markerIdx++;
         
@@ -638,7 +591,6 @@ $(document).ready(function(e){
          console.log("submit clicked");
 
          var str ="";
-
          
          for (var i =0; i<markers.length; i++){
         	 data = markers[i].data
@@ -651,7 +603,8 @@ $(document).ready(function(e){
         console.log(str)
         formObj.append(str).submit();
     })
-
+	
+    /*파일 저장 */
     $("input[type='file']").change(function(e){
         var formData = new FormData();
         var inputFile = $("input[name='uploadFile']");
@@ -662,22 +615,25 @@ $(document).ready(function(e){
             }
             formData.append("uploadFile",files[i]);
         }
-
+		console.log(files)
+		
 	    $.ajax({
 	        url:'/uploadAjaxAction',
 	        processData:false,
 	        contentType:false,
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(csrfHeadName,csrfTokenValue);
-            },
 	        data:formData,
 	        type:'POST',
 	        dataType:'json',
 	        success:function(result){
 	            console.log(result);
 	            showUploadResult(result);
+	        },
+	        error:function(error){
+	        	console.log(error);
+	        	console.log("error");
 	        }
 	    })
+	    
     })
 
     $(".uploadResult").on("click","button",function(e){
@@ -690,9 +646,6 @@ $(document).ready(function(e){
         $.ajax({
             url:'/deleteFile',
             data:{fileName:targetFile, type:type},
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(csrfHeadName,csrfTokenValue);
-            },
             dataType:'text',
             type:'POST',
             success:function(result){

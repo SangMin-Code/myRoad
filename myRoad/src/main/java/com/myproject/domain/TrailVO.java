@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class TrailVO {
+	
 	private Long userNo; 		//유저번호
 	private Long trailNo;		//코스번호
 	private String title;		//제목
