@@ -21,4 +21,5 @@ public class TrailVO {
 	private Date updateDate;	//수정일자
 	
 	private List<MarkerVO> markerList;
+	private List<PathVO> pathList;
 }

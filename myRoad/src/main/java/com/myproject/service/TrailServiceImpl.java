@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.myproject.domain.TrailVO;
 import com.myproject.mapper.AttachMapper;
 import com.myproject.mapper.MarkerMapper;
+import com.myproject.mapper.PathMapper;
 import com.myproject.mapper.TrailMapper;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +27,9 @@ public class TrailServiceImpl implements TrailService {
 	private MarkerMapper markerMapper;
 	@Setter(onMethod_=@Autowired)
 	private AttachMapper attachMapper;
+	@Setter(onMethod_=@Autowired)
+	private PathMapper pathMapper;
+	
 
 	@Override
 	public List<TrailVO> getTrailList() {
@@ -45,6 +49,16 @@ public class TrailServiceImpl implements TrailService {
 		
 		Long result = trailMapper.trailInsertSelectKey(trail);
 		
+		/*경로 추가 부분*/
+		if(trail.getPathList()==null||trail.getPathList().size()<=0) {
+			return result;
+		}
+		trail.getPathList().forEach(path->{
+			path.setTrailNo(trail.getTrailNo());
+			pathMapper.insert(path);
+		});
+		
+		/*마커 추가 부분*/
 		if(trail.getMarkerList()==null || trail.getMarkerList().size()<=0) {
 			return result;
 		}
@@ -52,8 +66,8 @@ public class TrailServiceImpl implements TrailService {
 		trail.getMarkerList().forEach(marker->{
 			marker.setTrailNo(trail.getTrailNo());
 			markerMapper.markerInsertSelectKey(marker);
-			
-			if(marker.getAttachList()!=null || marker.getAttachList().size()>0) {
+			/*마커별 파일 추가 부분*/
+			if(marker.getAttachList()!=null && !marker.getAttachList().isEmpty()) {
 				marker.getAttachList().forEach(attach->{
 					attach.setMarkerNo(marker.getMarkerNo());
 					attachMapper.insert(attach);

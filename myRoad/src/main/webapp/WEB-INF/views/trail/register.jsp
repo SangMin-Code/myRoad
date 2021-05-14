@@ -264,15 +264,7 @@ function makeLineClick(mouseEvent){
 
         var distance = Math.round(clickLine.getLength());
         displayCircleDot(clickPosition, distance);
-    }
-
-    a = clickLine.getPath()
-
-    for (var i =0; i<a.length; i++){
-        console.log(a[i].La+","+a[i].Ma)
-    }
-
-    
+    } 
 
 }
 // 지도에 마우스무브 이벤트를 등록합니다
@@ -310,10 +302,14 @@ function makeLineRightClick(mouseEvent){
         
         // 마우스 클릭으로 그린 선의 좌표 배열을 얻어옵니다
         var path = clickLine.getPath();
-    
+    	
         // 선을 구성하는 좌표의 개수가 2개 이상이면
         if (path.length > 1) {
-
+        		$("input[name='startLat']").val(path[0].Ma)
+        		$("input[name='startLng']").val(path[0].La)
+        		$("input[name='endLat']").val(path[path.length-1].Ma)
+        		$("input[name='endLng']").val(path[path.length-1].La)     
+        		
             // 마지막 클릭 지점에 대한 거리 정보 커스텀 오버레이를 지웁니다
             if (dots[dots.length-1].distance) {
                 dots[dots.length-1].distance.setMap(null);
@@ -597,8 +593,13 @@ $(document).ready(function(e){
     
 
     $("button[type='submit']").on("click",function(e){
-         e.preventDefault();
-        
+         e.preventDefault();               
+         
+         if(clickLine == null || drawingFlag){
+         	alert("경로를 지정해주세요")
+         	return
+         }
+         
          console.log("submit clicked");
 
          var str ="";
@@ -609,11 +610,21 @@ $(document).ready(function(e){
              str += "<input type = 'hidden' name = 'markerList["+i+"].content' value = '"+data.content+"'>";
              str += "<input type = 'hidden' name = 'markerList["+i+"].lat' value = '"+data.lat+"'>";
              str += "<input type = 'hidden' name = 'markerList["+i+"].lng' value = '"+data.lng+"'>";
-             	for (var j=0; j<data.files.length; j++){
-             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uuid' value ='"+data.files[j].uuid+"'>";
-             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uploadPath'value ='"+data.files[j].uploadPath+"'>";
-             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].fileName' value ='"+data.files[j].fileName+"'>";
+             	if(data.files!=null){
+	             	for (var j=0; j<data.files.length; j++){
+	             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uuid' value ='"+data.files[j].uuid+"'>";
+	             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uploadPath'value ='"+data.files[j].uploadPath+"'>";
+	             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].fileName' value ='"+data.files[j].fileName+"'>";
+	             	}
              	}
+         }
+         
+         
+         var t = clickLine.getPath()
+         console.log(t)
+         for (var i=0; i<t.length; i++){
+        	 str += "<input type = 'hidden' name = 'pathList["+i+"].lat' value = '"+t[i].Ma+"'>"; 
+        	 str += "<input type = 'hidden' name = 'pathList["+i+"].lng' value = '"+t[i].La+"'>"; 
          }
         
         console.log(str)
