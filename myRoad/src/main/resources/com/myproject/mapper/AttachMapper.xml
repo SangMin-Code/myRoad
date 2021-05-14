@@ -10,16 +10,16 @@
 			insert into tbl_attach
 	    		(
 	    		 uuid					<!--uuid -->
-	    		 ,filepath				<!-- 파일경로 -->
+	    		 ,uploadPath				<!-- 파일경로 -->
 	    		 ,filename				<!-- 파일명 -->
 	    		 ,markerNo				<!-- 마커번호 -->
 	     		)
 			values
 	    		(
-	    		 #{uuid},				<!-- uuid-->
-	    		 ,#{filepath}			<!-- 파일경로-->
-	    		 ,#{filename}			<!-- 파일명-->
-	    		 #{markerNo}			<!-- 마커번호-->
+	    		 #{uuid}				<!-- uuid-->
+	    		 ,#{uploadPath}			<!-- 파일경로-->
+	    		 ,#{fileName}			<!-- 파일명-->
+	    		 ,#{markerNo}			<!-- 마커번호-->
 	    		 )		
 	</insert>
 	

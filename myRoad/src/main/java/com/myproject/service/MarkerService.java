@@ -9,5 +9,7 @@ public interface MarkerService {
 	
 	//MarkerInsert
 	public void	insertMarker(MarkerVO marker);
+	//MarkerInsertSelect
+	public void insertSelectKeyMarker(MarkerVO marker);
 	
 }

@@ -30,5 +30,32 @@
 	    		 sysdate			<!-- 수정일자 -->
 	    		 )		
 	</insert>
-
+	
+	<insert id="markerInsertSelectKey">
+		<selectKey keyProperty="markerNo" order="BEFORE" resultType="long">
+			select seq_marker.nextval from dual
+		</selectKey>
+			insert into tbl_marker
+	    		(
+	     		trailno,	<!-- 코스번호 -->
+	     		markerno,   <!-- 마커번호 -->
+	     		title,		<!-- 제목 -->
+	     		content,	<!-- 내용 -->
+	     		lat,		<!-- 출발위도 -->
+	     		lng,		<!-- 출발경도 -->
+	     		regdate,	<!-- 등록일자 -->
+	     		updatedate	<!-- 수정일자 -->
+	     		)
+			values
+	    		(
+	    		 #{trailNo},		<!-- 코스번호 -->
+	    		 #{markerNo},<!-- 마커번호 -->	
+	    		 #{title},			<!-- 제목 -->
+	    		 #{content},		<!-- 내용 -->
+	    		 #{lat},			<!-- 출발위도 -->
+	    		 #{lng},			<!-- 출발경도 -->
+	    		 sysdate,			<!-- 등록일자 -->
+	    		 sysdate			<!-- 수정일자 -->
+	    		 )		
+	</insert>
 </mapper>

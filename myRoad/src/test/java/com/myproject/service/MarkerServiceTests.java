@@ -28,7 +28,7 @@ public class MarkerServiceTests {
 		assertNotNull(markerService);
 	}
 	
-	@Test
+	//@Test
 	public void testInsertMarkerService() {
 		log.info("insertMarkertService test");
 		
@@ -43,4 +43,20 @@ public class MarkerServiceTests {
 				
 	}
 	
+	@Test
+	public void testInsertSelectMarkerService() {
+		log.info("insertSelectMarkertService test");
+		
+		MarkerVO marker = new MarkerVO();
+		marker.setTrailNo(42L);
+		marker.setTitle("test");
+		marker.setContent("test");
+		marker.setLng(126.57138305595264D);
+		marker.setLat(33.450450810177195D);
+		
+		markerService.insertSelectKeyMarker(marker);
+		
+		log.info(marker.getMarkerNo().toString());
+				
+	}
 }

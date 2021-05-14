@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.myproject.domain.AttachVO;
 import com.myproject.domain.MarkerVO;
 import com.myproject.domain.TrailVO;
+import com.myproject.mapper.AttachMapper;
 import com.myproject.mapper.MarkerMapper;
 import com.myproject.mapper.TrailMapper;
 
@@ -15,27 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class MarkerServiceImpl implements MarkerService {
+public class AttachServiceImpl implements AttachService {
 	
-	private MarkerMapper markerMapper;
+	private AttachMapper attachMapper;
+
 
 	@Override
-	public void insertMarker(MarkerVO marker) {
+	public void insertAttach(AttachVO attach) {
+		log.info("attachMapper.insertAttach");
 		
-		log.info("markerMapper.insertMarker");
-		
-		markerMapper.markerInsert(marker);
-		
+		attachMapper.insert(attach);
 	}
 
-	@Override
-	public void insertSelectKeyMarker(MarkerVO marker) {
-		
-		log.info("markerMapper.insertSelectKeyMarker");
-		
-		markerMapper.markerInsertSelectKey(marker);
-
-		
-	}
 
 }

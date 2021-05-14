@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.myproject.domain.TrailVO;
+import com.myproject.mapper.AttachMapper;
 import com.myproject.mapper.MarkerMapper;
 import com.myproject.mapper.TrailMapper;
 
@@ -23,6 +24,8 @@ public class TrailServiceImpl implements TrailService {
 	private TrailMapper trailMapper;
 	@Setter(onMethod_=@Autowired)
 	private MarkerMapper markerMapper;
+	@Setter(onMethod_=@Autowired)
+	private AttachMapper attachMapper;
 
 	@Override
 	public List<TrailVO> getTrailList() {
@@ -42,14 +45,20 @@ public class TrailServiceImpl implements TrailService {
 		
 		Long result = trailMapper.trailInsertSelectKey(trail);
 		
-		//TODO trail service안에 넣어야 하는지?? 안에 컨텐츠 list도 넣을건데
 		if(trail.getMarkerList()==null || trail.getMarkerList().size()<=0) {
 			return result;
 		}
 		
 		trail.getMarkerList().forEach(marker->{
 			marker.setTrailNo(trail.getTrailNo());
-			markerMapper.markerInsert(marker);
+			markerMapper.markerInsertSelectKey(marker);
+			
+			if(marker.getAttachList()!=null || marker.getAttachList().size()>0) {
+				marker.getAttachList().forEach(attach->{
+					attach.setMarkerNo(marker.getMarkerNo());
+					attachMapper.insert(attach);
+				});
+			};
 		});
 		
 		return result;

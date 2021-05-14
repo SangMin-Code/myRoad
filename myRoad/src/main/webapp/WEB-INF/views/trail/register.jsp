@@ -3,7 +3,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-
+<style>
+.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
+.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
+.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
+.number {font-weight:bold;color:#ee6152;}
+.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+.distanceInfo .label {display:inline-block;width:50px;}
+.distanceInfo:after {content:none;}
+</style>
 <%@include file ="/WEB-INF/views/includes/header.jsp" %>
 
                 <!-- Begin Page Content -->
@@ -155,6 +164,7 @@ function makeMarker(mouseEvent){
         			$("#markerTitle").val(markers[i].data.title)
         			$("#markerContent").val(markers[i].data.content)
         			$("#markerIdx").val(marker.getTitle())
+        			showUploadResult(markers[i].data.files)
         		}
         	}
       	});
@@ -488,34 +498,35 @@ function checkExtension(fileName, fileSize){
 }
 
 function showUploadResult(uploadResultArr){
-	if(!uploadResultArr||uploadResultArr.length==0){return;}
-
     var uploadUL = $(".uploadResult ul");
     var str = "";
+    
+	if(!uploadResultArr||uploadResultArr.length==0){
+		uploadUL.html(str)
+		return;
+		}
+    
     $(uploadResultArr).each(function(i,obj){
-        //image type
-        if(obj.image){
             var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName)
-            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'";  /* TODO fileName filename -> data filename why?  */
+            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'"; 
             str+=" data-type='"+obj.image+"'><div>";
             str+= "<span>"+obj.fileName+"</span>";
             str+="<img class='ml-2' src='/display?fileName="+fileCallPath+"'>";
             str+="<button type='button' class='btn btn-warning btn-circle' style='float:right;' data-file=\'"+fileCallPath+"\' data-type='image'>" 
             str+="<i class='fa fa-times'></i></button>"
             str+="</div></li>"
-        }else{
-            var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
-            var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'" ;
-            str+=" data-type='"+obj.image+"'><div>";
-            str += "<span>"+obj.fileName+"</span>";
-            str += "<img src ='/resources/img/attach.png' class='ml-2' style='width:30px; height:30px'></a>";
-            str += "<button type='button' class='btn btn-warning btn-circle' style='float:right;' data-file=\'"+fileCallPath+"\' data-image='file'>"
-            str += "<i class='fa fa-times'></i></button>"
-            str+="</div></li>"
-        }
     });
-    uploadUL.append(str);
+    uploadUL.html(str);
+}
+
+function appendFileList(result){
+	idx = $("#markerIdx").val()
+	for (var i=0; i<markers.length; i++){
+		if (markers[i].marker.getTitle()==idx){
+			markers[i].data.files = result
+			break
+		}
+	}
 }
 
 //onload
@@ -586,7 +597,7 @@ $(document).ready(function(e){
     
 
     $("button[type='submit']").on("click",function(e){
-        e.preventDefault();
+         e.preventDefault();
         
          console.log("submit clicked");
 
@@ -598,6 +609,11 @@ $(document).ready(function(e){
              str += "<input type = 'hidden' name = 'markerList["+i+"].content' value = '"+data.content+"'>";
              str += "<input type = 'hidden' name = 'markerList["+i+"].lat' value = '"+data.lat+"'>";
              str += "<input type = 'hidden' name = 'markerList["+i+"].lng' value = '"+data.lng+"'>";
+             	for (var j=0; j<data.files.length; j++){
+             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uuid' value ='"+data.files[j].uuid+"'>";
+             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].uploadPath'value ='"+data.files[j].uploadPath+"'>";
+             		str += "<input type = 'hidden' name = 'markerList["+i+"].attachList["+j+"].fileName' value ='"+data.files[j].fileName+"'>";
+             	}
          }
         
         console.log(str)
@@ -606,6 +622,13 @@ $(document).ready(function(e){
 	
     /*파일 저장 */
     $("input[type='file']").change(function(e){
+    	
+    	if($("#markerIdx").val()==0 || $("#markerIdx").val()==null || $("#markerIdx").val()==""){
+    		alert("마커를 선택해주세요.")
+    		$("input[type='file']").val()
+    		return
+    	}
+    	
         var formData = new FormData();
         var inputFile = $("input[name='uploadFile']");
         var files = inputFile[0].files;
@@ -625,12 +648,12 @@ $(document).ready(function(e){
 	        type:'POST',
 	        dataType:'json',
 	        success:function(result){
-	            console.log(result);
+	        	console.log(result)
 	            showUploadResult(result);
+	            appendFileList(result);
 	        },
 	        error:function(error){
-	        	console.log(error);
-	        	console.log("error");
+	        	console.log(error)
 	        }
 	    })
 	    
