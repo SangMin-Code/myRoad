@@ -11,5 +11,6 @@ public interface TrailService {
 	
 	public Long insertSelectKeyTrail(TrailVO trail);
 	
+	public TrailVO getTrail(Long trailNo);
 	
 }

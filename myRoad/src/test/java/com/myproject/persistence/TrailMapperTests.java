@@ -36,7 +36,7 @@ public class TrailMapperTests {
 		mainMapper.getList().forEach(trail -> log.info(trail));
 	}
 	
-	@Test
+	//@Test
 	//Train trailSelectInsertKey
 	public void testTrailSelectInsertKey() {
 		
@@ -53,6 +53,17 @@ public class TrailMapperTests {
 		mainMapper.trailInsertSelectKey(trail);
 		
 		log.info(trail);
+	}
+	
+	@Test
+	//Train TrailGet
+	public void testTralget() {
+		
+		Long trailNo = 71L;
+		
+		TrailVO trailvo = mainMapper.trailGet(trailNo);
+		
+		log.info(trailvo);
 	}
 	
 }

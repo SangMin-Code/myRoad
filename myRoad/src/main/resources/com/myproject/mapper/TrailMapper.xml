@@ -42,5 +42,23 @@
 	    		 sysdate		<!-- 수정일자 -->
 	    		 )		
 	</insert>
+	
+	<select id="trailGet" resultType="com.myproject.domain.TrailVO">
+		select
+			userno <!-- user 번호 -->
+			,trailno <!-- 코스번호 -->
+			,title <!-- 제목 -->
+			,thumnail <!-- 섬네일 -->
+			,content <!-- 내용 -->
+			,startlat <!-- 출발위도 -->
+			,startlng <!-- 출발경도 -->
+			,endlat <!-- 도착위도 -->
+			,endlng <!-- 도착경도 -->
+			,regdate <!-- 등록일자 -->
+			,updatedate <!--수정일자 -->
+		from tbl_trail
+		where trailNo=#{trailNo}
+	</select>
+	
 
 </mapper>

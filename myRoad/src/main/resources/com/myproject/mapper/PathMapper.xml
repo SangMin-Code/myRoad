@@ -9,17 +9,26 @@
 	<insert id="insert">
 			insert into tbl_path
 	    		(
-	    		 trailNo					<!-- -->
-	    		 ,lat				<!--  -->
-	    		 ,lng				<!--  -->
+	    		 trailNo					<!--코스번호 -->
+	    		 ,lat				<!-- 위도 -->
+	    		 ,lng				<!-- 경도 -->
 	     		)
 			values
 	    		(
-	    		 #{trailNo}				<!-- -->
-	    		 ,#{lat}			<!-- -->
-	    		 ,#{lng}			<!-- -->
+	    		 #{trailNo}				<!-- 코스번호 -->
+	    		 ,#{lat}			<!--위도 -->
+	    		 ,#{lng}			<!--경도 -->
 	    		 )		
 	</insert>
+	
+	<select id="pathGetList" resultType="com.myproject.domain.PathVO">
+		select
+			trailNo		<!-- 코스번호 -->
+			,lat		<!-- 위도 -->
+			,lng		<!-- 경도 -->
+		from tbl_path
+		where trailno = #{trailNo}
+	</select>
 	
 
 </mapper>

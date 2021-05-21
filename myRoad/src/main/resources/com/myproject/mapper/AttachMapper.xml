@@ -30,7 +30,7 @@
 	<select id="findByMarkerNo" resultType="com.myproject.domain.AttachVO">
 		select 
 			uuid
-			,filepath
+			,uploadPath
 			,filename
 			,markerNo
 		 from 

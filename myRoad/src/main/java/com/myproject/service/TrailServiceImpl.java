@@ -79,4 +79,17 @@ public class TrailServiceImpl implements TrailService {
 		
 	}
 
+	@Override
+	@Transactional
+	public TrailVO getTrail(Long trailNo) {
+		
+		log.info("getTrail...");
+		
+		TrailVO trailvo =trailMapper.trailGet(trailNo);
+		
+		trailvo.setMarkerList(markerMapper.markerGetList(trailNo));
+		
+		return trailvo;
+	}
+
 }

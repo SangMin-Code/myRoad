@@ -37,7 +37,7 @@ public class TrailServiceTests {
 		trailService.getTrailList().forEach(trail -> log.info(trail.toString()));
 	}
 	
-	@Test
+	//@Test
 	public void testInsertSelectTrailTests() {
 		log.info("insertSelect test");
 		
@@ -63,6 +63,17 @@ public class TrailServiceTests {
 		trailService.insertSelectKeyTrail(trail);
 		
 		log.info(trail.getTrailNo().toString());
+		
+	}
+	
+	@Test
+	public void testgetTrail() {
+		
+		log.info("testGetTrail");
+		
+		Long trailNo=81L;
+		
+		trailService.getTrail(trailNo);
 		
 	}
 	

@@ -25,7 +25,7 @@ public class MarkerMapperTests {
 	private MarkerMapper mapper;
 		
 
-	@Test
+	//@Test
 	//Marker MarkerInsert test
 	public void testMarkerInsert() {
 		
@@ -41,5 +41,14 @@ public class MarkerMapperTests {
 		
 		log.info("test end");
 	}
+	@Test
+	public void testMarkerGetList() {
+		
+		log.info("testMarkerGetList");
+		
+		Long trailNo = 71L;
+		
+		mapper.markerGetList(trailNo);
 	
+	}
 }

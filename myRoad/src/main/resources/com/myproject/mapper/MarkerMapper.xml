@@ -58,4 +58,17 @@
 	    		 sysdate			<!-- 수정일자 -->
 	    		 )		
 	</insert>
+	
+	<!-- 코스 마커리스트 조회 -->
+	<select id="markerGetList" resultType="com.myproject.domain.MarkerVO">
+		select
+			trailNo
+			,markerNo
+			,title
+			,content
+			,lat
+			,lng
+		from tbl_marker
+		where trailno = #{trailNo}
+	</select>
 </mapper>

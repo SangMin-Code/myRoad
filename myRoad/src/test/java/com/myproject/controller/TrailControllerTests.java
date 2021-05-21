@@ -44,7 +44,7 @@ public class TrailControllerTests {
 		.getModelMap();
 	}
 	
-	@Test
+	//@Test
 	public void testRegister() throws Exception{
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/trail/register")
 				.param("userNo", "1")
@@ -58,6 +58,14 @@ public class TrailControllerTests {
 				.andReturn().getModelAndView().getViewName();
 		log.info(resultPage);
 		
+	}
+	
+	@Test
+	public void testgetTrail() throws Exception{
+		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/trail/getTrail")
+				.param("trailNo", "81"))
+				.andReturn().getModelAndView().getModelMap().toString()
+				);
 	}
 	
 

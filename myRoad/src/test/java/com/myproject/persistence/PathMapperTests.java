@@ -1,5 +1,7 @@
 package com.myproject.persistence;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class PathMapperTests {
 	private PathMapper mapper;
 		
 
-	@Test
+	//@Test
 	//Marker MarkerInsert test
 	public void testpathInsert() {
 		
@@ -42,5 +44,16 @@ public class PathMapperTests {
 		
 		log.info("test end");
 	}
+	
+	//@Test
+	public void testPathgetList() {
+		Long trailNo = 81L;
+		List<PathVO> pathList =mapper.pathGetList(trailNo);
+		log.info(pathList);
+		
+	}
+	
+	
+	
 	
 }

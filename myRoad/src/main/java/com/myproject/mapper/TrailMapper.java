@@ -10,4 +10,8 @@ public interface TrailMapper {
 	
 	//Main Trail 등록
 	public Long trailInsertSelectKey(TrailVO trail);
+	
+	//Trail 상세
+	public TrailVO trailGet(Long trailNo);
+	
 }

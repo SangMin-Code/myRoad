@@ -1,5 +1,7 @@
 package com.myproject.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.myproject.domain.PathVO;
@@ -17,11 +19,19 @@ public class PathServiceImpl implements PathService {
 
 	@Override
 	public void insertPath(PathVO path) {
-		log.info("attachMapper.insertAttach");
+		log.info("pathMapper.insertPath");
 		
 		pathMapper.insert(path);
 		
 	}
 
+	@Override
+	public List<PathVO> getListPath(Long trailNo) {
+		log.info("pathMapper.getListPath");
+		
+		return pathMapper.pathGetList(trailNo);		
+	}
+	
+	
 
 }

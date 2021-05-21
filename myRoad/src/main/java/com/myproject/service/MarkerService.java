@@ -11,5 +11,6 @@ public interface MarkerService {
 	public void	insertMarker(MarkerVO marker);
 	//MarkerInsertSelect
 	public void insertSelectKeyMarker(MarkerVO marker);
-	
+	//MarkerGetList
+	public List<MarkerVO> getListMarker(Long markerNo);
 }
