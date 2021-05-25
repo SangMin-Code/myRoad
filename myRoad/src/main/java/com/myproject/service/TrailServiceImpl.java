@@ -109,7 +109,7 @@ public class TrailServiceImpl implements TrailService {
 		}
 		
 		trail.getMarkerList().forEach(marker->{
-			if (marker.getState() =="I") {
+			if ("I".equals(marker.getState())) {
 				marker.setTrailNo(trail.getTrailNo());
 				markerMapper.markerInsertSelectKey(marker);
 				/*마커별 파일 추가 부분*/
@@ -119,7 +119,7 @@ public class TrailServiceImpl implements TrailService {
 						attachMapper.insert(attach);
 					});
 				};
-			}else if (marker.getState()=="U") {
+			}else if ("U".equals(marker.getState())) {
 				markerMapper.markerUpdate(marker);
 				attachMapper.deleteByMarkerNo(marker.getMarkerNo());
 				if(marker.getAttachList()!=null && !marker.getAttachList().isEmpty()) {
@@ -128,7 +128,7 @@ public class TrailServiceImpl implements TrailService {
 						attachMapper.insert(attach);
 					});
 				};
-			}else if (marker.getState()=="D") {
+			}else if ("D".equals(marker.getState())) {
 				attachMapper.deleteByMarkerNo(marker.getMarkerNo());
 				markerMapper.markerDelete(marker.getMarkerNo());
 			}

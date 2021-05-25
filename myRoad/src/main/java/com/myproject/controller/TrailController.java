@@ -74,7 +74,6 @@ public class TrailController {
 		
 	}
 	
-	
 	//register 화면
 	@GetMapping("/register")
 	public void trailRegister(Model mode) {
@@ -98,9 +97,9 @@ public class TrailController {
 	
 	//modify 화면
 	@GetMapping("/modify")
-	public void trailModify(Model mode) {
+	public void modify(@RequestParam("trailNo") Long trailNo, Model model) {	
 		log.info("modify");
-		
+		model.addAttribute("trail",trailService.getTrail(trailNo));
 	}
 	
 	//modify 처리

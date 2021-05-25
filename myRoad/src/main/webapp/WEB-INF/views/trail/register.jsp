@@ -147,11 +147,12 @@ function makeMarker(mouseEvent){
         title:markerIdx
         }); 
        	
-        var data = {lat:latlng.getLat(),
-        			lng:latlng.getLng(),
-        			title:"hello",
-        			content:"it's me"+markerIdx,
-        			markerNo:-1 
+        var data = {lat:latlng.getLat()
+        			,lng:latlng.getLng()
+        			,title:"hello"
+        			,content:"it's me"+markerIdx
+        			,markerNo:-1
+        			,state:"I"
         			}
         markerIdx++;
         
@@ -476,6 +477,7 @@ function getTimeHTML(distance) {
 
 <!-- others -->
 <script>
+var test = []
 var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 var maxSize = 5242880;
 var csrfHeadName ="${_csrf.headerName}";
@@ -503,15 +505,16 @@ function showUploadResult(uploadResultArr){
 		}
     
     $(uploadResultArr).each(function(i,obj){
+    		
             var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName)
-            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'"; 
-            str+=" data-type='"+obj.image+"'><div>";
+            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'"+"><div>"; 
             str+= "<span>"+obj.fileName+"</span>";
             str+="<img class='ml-2' src='/display?fileName="+fileCallPath+"'>";
-            str+="<button type='button' class='btn btn-warning btn-circle' style='float:right;' data-file=\'"+fileCallPath+"\' data-type='image'>" 
+            str+="<button type='button' class='btn btn-warning btn-circle' style='float:right;' data-file=\'"+fileCallPath+"\'>" 
             str+="<i class='fa fa-times'></i></button>"
             str+="</div></li>"
     });
+    
     uploadUL.html(str);
 }
 
@@ -627,7 +630,11 @@ $(document).ready(function(e){
         	 str += "<input type = 'hidden' name = 'pathList["+i+"].lng' value = '"+t[i].La+"'>"; 
          }
         
-        console.log(str)
+         
+         
+        //console.log(str)
+        
+        
         formObj.append(str).submit();
     })
 	
@@ -667,7 +674,7 @@ $(document).ready(function(e){
 	        	console.log(error)
 	        }
 	    })
-	    
+
     })
 
     $(".uploadResult").on("click","button",function(e){
