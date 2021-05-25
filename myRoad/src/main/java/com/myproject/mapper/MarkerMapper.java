@@ -14,4 +14,11 @@ public interface MarkerMapper {
 
 	//getmarker
 	public List<MarkerVO> markerGetList(Long trailNo);
+
+	//update
+	public int markerUpdate(MarkerVO marker);
+	
+	//delete
+	public int markerDelete(Long markerNo);
+	
 }

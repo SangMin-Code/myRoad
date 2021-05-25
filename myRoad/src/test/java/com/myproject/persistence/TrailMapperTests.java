@@ -22,7 +22,7 @@ public class TrailMapperTests {
 	private SampleMapper mapper;
 	
 	@Setter(onMethod_=@Autowired)
-	private TrailMapper mainMapper;
+	private TrailMapper trailMapper;
 	
 	//@Test
 	public void testGetTime() {
@@ -33,7 +33,7 @@ public class TrailMapperTests {
 	//@Test
 	//Trail Main
 	public void testGetList() { 
-		mainMapper.getList().forEach(trail -> log.info(trail));
+		trailMapper.getList().forEach(trail -> log.info(trail));
 	}
 	
 	//@Test
@@ -50,20 +50,45 @@ public class TrailMapperTests {
 		trail.setEndLat(37.566828D);
 		trail.setEndLng(126.978658D);
 		
-		mainMapper.trailInsertSelectKey(trail);
+		trailMapper.trailInsertSelectKey(trail);
 		
 		log.info(trail);
 	}
 	
-	@Test
+	//@Test
 	//Train TrailGet
 	public void testTralget() {
 		
 		Long trailNo = 71L;
 		
-		TrailVO trailvo = mainMapper.trailGet(trailNo);
+		TrailVO trailvo = trailMapper.trailGet(trailNo);
 		
 		log.info(trailvo);
+	
 	}
+	
+	//@Test
+	//Train TrailGet
+	public void testTrailUpdate() {
+		
+		TrailVO trailvo = new TrailVO();
+		trailvo.setTrailNo(123L);
+		trailvo.setContent("업데이트 테스트");
+		trailvo.setTitle("업데이트 테스트 타이틀");
+			
+		log.info("Update Count: "+trailMapper.trailUpdate(trailvo));
+		
+	}
+	
+	@Test
+	//Train TrailDelete
+	public void testTrailDelete() {
+		
+		Long trailNo = 123L;
+			
+		log.info("Delete Count: "+ trailMapper.trailDelete(trailNo));
+		
+	}
+	
 	
 }

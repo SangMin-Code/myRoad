@@ -11,4 +11,6 @@ public interface AttachMapper {
 	public void delete(String uuid);
 	public List<AttachVO> findByMarkerNo(Long markerNo);
 	
+	public void deleteByMarkerNo(Long markerNo);
+	
 }

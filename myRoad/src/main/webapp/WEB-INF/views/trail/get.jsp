@@ -391,6 +391,7 @@ function makeMarker(markerArr){
     			,"content":content
     			,"markerNo":markerNo
     			,"files":files
+    			,"state":"R"
     	}
     	markeridx++;
     	

@@ -17,6 +17,8 @@ public class MarkerVO {
 	private Date regdate;		//등록일자
 	private Date updateDate;	//수정일자
 	
+	private String state; //U,R,D,I
+	
 	private List<AttachVO> attachList;
 	
 }

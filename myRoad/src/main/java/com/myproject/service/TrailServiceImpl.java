@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.myproject.domain.AttachFileDTO;
+import com.myproject.domain.AttachVO;
+import com.myproject.domain.MarkerVO;
 import com.myproject.domain.TrailVO;
 import com.myproject.mapper.AttachMapper;
 import com.myproject.mapper.MarkerMapper;
@@ -90,6 +93,68 @@ public class TrailServiceImpl implements TrailService {
 		trailvo.setMarkerList(markerMapper.markerGetList(trailNo));
 		
 		return trailvo;
+	}
+	
+	@Transactional
+	@Override
+	public int updateTrail(TrailVO trail) {
+		
+		log.info("updateTrail..."+trail);
+		
+		int result =trailMapper.trailUpdate(trail);
+			
+		/*마커 추가 부분*/
+		if(trail.getMarkerList()==null || trail.getMarkerList().size()<=0) {
+			return result;
+		}
+		
+		trail.getMarkerList().forEach(marker->{
+			if (marker.getState() =="I") {
+				marker.setTrailNo(trail.getTrailNo());
+				markerMapper.markerInsertSelectKey(marker);
+				/*마커별 파일 추가 부분*/
+				if(marker.getAttachList()!=null && !marker.getAttachList().isEmpty()) {
+					marker.getAttachList().forEach(attach->{
+						attach.setMarkerNo(marker.getMarkerNo());
+						attachMapper.insert(attach);
+					});
+				};
+			}else if (marker.getState()=="U") {
+				markerMapper.markerUpdate(marker);
+				attachMapper.deleteByMarkerNo(marker.getMarkerNo());
+				if(marker.getAttachList()!=null && !marker.getAttachList().isEmpty()) {
+					marker.getAttachList().forEach(attach->{
+						attach.setMarkerNo(marker.getMarkerNo());
+						attachMapper.insert(attach);
+					});
+				};
+			}else if (marker.getState()=="D") {
+				attachMapper.deleteByMarkerNo(marker.getMarkerNo());
+				markerMapper.markerDelete(marker.getMarkerNo());
+			}
+		});
+		
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public int deleteTrail(Long trailNo) {
+		
+		pathMapper.pathDelete(trailNo);
+		
+		List<MarkerVO> markerList = markerMapper.markerGetList(trailNo);
+		
+		if(markerList!=null && markerList.size()>0) {
+			markerList.forEach(marker->{
+				attachMapper.deleteByMarkerNo(marker.getMarkerNo());
+				markerMapper.markerDelete(marker.getMarkerNo());
+			});
+		}
+		
+		int result =trailMapper.trailDelete(trailNo);
+		
+		return result;
 	}
 
 }

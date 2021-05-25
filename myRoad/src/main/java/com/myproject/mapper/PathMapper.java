@@ -11,4 +11,7 @@ public interface PathMapper {
 	public void insert(PathVO vo);
 	
 	public List<PathVO> pathGetList(Long trailNo);
+
+	public int pathDelete(Long trailNo);
+
 }

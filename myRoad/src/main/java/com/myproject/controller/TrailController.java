@@ -1,5 +1,8 @@
 package com.myproject.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.myproject.domain.AttachVO;
 import com.myproject.domain.MarkerVO;
 import com.myproject.domain.PathVO;
 import com.myproject.domain.TrailVO;
@@ -92,7 +96,74 @@ public class TrailController {
 		
 	}
 	
+	//modify 화면
+	@GetMapping("/modify")
+	public void trailModify(Model mode) {
+		log.info("modify");
+		
+	}
 	
+	//modify 처리
+	@PostMapping("/modify")
+	public String trailModify(TrailVO trail, RedirectAttributes rttr) {
+			
+	log.info("modify: "+trail);
+	
+	int result =trailService.updateTrail(trail);
+					
+	rttr.addFlashAttribute("result", result);
+			
+	return "redirect:/trail/main";
+			
+	}
+	
+	//delete 처리
+	@PostMapping("/delete")
+	public String traildelete(@RequestParam("trailNo") Long trailNo, RedirectAttributes rttr) {
+		
+		log.info("delete: "+trailNo);
+		
+		List<MarkerVO> markerList = trailService.getTrail(trailNo).getMarkerList();
+		
+		int result =trailService.deleteTrail(trailNo);
+		
+		if(result==1) {
+			if(markerList!=null && markerList.size()>0) {
+				markerList.forEach(marker ->{
+				deleteFiles(marker.getAttachList());
+			});
+			
+			};
+		}
+		
+		rttr.addFlashAttribute("result", "success");
+		
+		return "redirect:/trail/main";
+		
+	}
+	
+	private void deleteFiles(List<AttachVO> attachList) {
+		
+		if(attachList ==null||attachList.size()==0) {
+			return;
+		}
+		
+		log.info("delete attach files..............");
+		log.info(attachList.toString());
+		
+		attachList.forEach(attach ->{
+			try {
+				Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+				Files.deleteIfExists(file);
+				if(Files.probeContentType(file).startsWith("image")) {
+					Path thumNail = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+					Files.delete(thumNail);
+				}
+			} catch (Exception e) {
+				log.error("delete file error"+e.getMessage());
+			}
+		});
+	}
 	
 	
 	

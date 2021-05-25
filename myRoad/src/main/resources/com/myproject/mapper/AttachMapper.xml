@@ -27,6 +27,10 @@
 		delete from tbl_attach where uuid = #{uuid}
 	</delete>
 	
+	<delete id="deleteByMarkerNo">
+		delete from tbl_attach where markerNo = #{markerNo}
+	</delete>
+	
 	<select id="findByMarkerNo" resultType="com.myproject.domain.AttachVO">
 		select 
 			uuid
@@ -36,6 +40,8 @@
 		 from 
 		 tbl_attach where markerno = #{markerNo}
 	</select>
+	
+
 	
 	
 

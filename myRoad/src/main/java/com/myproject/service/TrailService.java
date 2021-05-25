@@ -13,4 +13,8 @@ public interface TrailService {
 	
 	public TrailVO getTrail(Long trailNo);
 	
+	public int updateTrail(TrailVO trail);
+	
+	public int deleteTrail(Long trailNo);
+	
 }

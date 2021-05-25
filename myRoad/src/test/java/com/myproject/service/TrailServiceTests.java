@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.myproject.domain.AttachVO;
 import com.myproject.domain.MarkerVO;
 import com.myproject.domain.TrailVO;
 
@@ -66,7 +67,7 @@ public class TrailServiceTests {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testgetTrail() {
 		
 		log.info("testGetTrail");
@@ -75,6 +76,73 @@ public class TrailServiceTests {
 		
 		trailService.getTrail(trailNo);
 		
+	}
+	
+	//@Test
+	public void testupdateTrail() {
+		log.info("testUpdateTRail");
+		
+		TrailVO trail = new TrailVO();
+		
+		trail.setTrailNo(124L);
+		trail.setContent("콘콘콘");
+		trail.setTitle("타타타");
+		
+		List<MarkerVO> markerList = new ArrayList<MarkerVO>();
+		
+		MarkerVO insert = new MarkerVO();
+		insert.setTrailNo(124L);
+		insert.setState("I");
+		insert.setTitle("test marekr");
+		insert.setContent("test");
+		insert.setLat(33.450450810177195d);
+		insert.setLng(126.57138305595264d);
+		
+		List<AttachVO> insertAttach = new ArrayList<AttachVO>();
+		AttachVO insertFile = new AttachVO();
+		insertFile.setFileName("insert test");
+		insertFile.setUuid("insert test");
+		insertFile.setUploadPath("insert test");
+		insertAttach.add(insertFile);
+		insert.setAttachList(insertAttach);
+		
+		markerList.add(insert);
+		
+		MarkerVO update = new MarkerVO();
+		update.setTrailNo(124L);
+		update.setState("U");
+		update.setMarkerNo(91L);
+		update.setTitle("update test marekr");
+		update.setContent("update test");
+		
+		List<AttachVO> updateAttach = new ArrayList<AttachVO>();
+		AttachVO updateFile = new AttachVO();
+		updateFile.setFileName("update test");
+		updateFile.setUuid("update test");
+		updateFile.setUploadPath("update test");
+		updateAttach.add(updateFile);
+		update.setAttachList(updateAttach);
+		
+		markerList.add(update);
+		
+		MarkerVO delete = new MarkerVO();
+		delete.setTrailNo(124L);
+		delete.setState("D");
+		delete.setMarkerNo(90L);
+		
+		markerList.add(delete);
+		
+		trail.setMarkerList(markerList);
+		
+		trailService.updateTrail(trail);		
+
+	}
+	
+	@Test
+	public void testdeleteTrail() {
+		log.info("deleteTrail");
+		Long trailNo = 123L;
+		trailService.deleteTrail(trailNo);
 	}
 	
 }

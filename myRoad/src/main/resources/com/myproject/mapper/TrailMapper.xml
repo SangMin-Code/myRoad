@@ -60,5 +60,16 @@
 		where trailNo=#{trailNo}
 	</select>
 	
-
+	
+	<update id="trailUpdate">
+		update tbl_trail set
+			title = #{title}
+			,content = #{content}
+			,updateDate = sysdate
+		where trailNo = #{trailNo}
+	</update>
+	
+	<delete id="trailDelete">
+		delete tbl_trail where trailNo = #{trailNo}
+	</delete>
 </mapper>

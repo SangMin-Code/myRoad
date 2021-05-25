@@ -14,4 +14,6 @@ public interface PathService {
 	//getPathList
 	public List<PathVO> getListPath(Long trailNo);
 	
+	
+	
 }

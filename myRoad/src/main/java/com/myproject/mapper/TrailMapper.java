@@ -14,4 +14,9 @@ public interface TrailMapper {
 	//Trail 상세
 	public TrailVO trailGet(Long trailNo);
 	
+	//Trail update
+	public int trailUpdate(TrailVO trail);
+	
+	//Trail delete
+	public int trailDelete(Long traulNo);
 }

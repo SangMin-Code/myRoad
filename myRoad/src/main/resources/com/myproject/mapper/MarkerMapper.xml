@@ -71,4 +71,21 @@
 		from tbl_marker
 		where trailno = #{trailNo}
 	</select>
+	
+	<!-- 마커 수정 -->
+	<update id="markerUpdate">
+		update tbl_marker set
+			title = #{title}
+			,content = #{content}
+		where markerno = #{markerNo}
+	</update>
+	
+	<delete id="markerDelete">
+		delete tbl_marker where markerNo=#{markerNo}
+	</delete>
+	
+	<delete id="deleteByTrailNo">
+		delete tbl_marker where trailNo =#{trailNo}
+	</delete>
+	
 </mapper>
