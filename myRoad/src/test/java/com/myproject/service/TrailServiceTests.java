@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.myproject.domain.AttachVO;
+import com.myproject.domain.Criteria;
 import com.myproject.domain.MarkerVO;
 import com.myproject.domain.TrailVO;
 
@@ -32,10 +33,10 @@ public class TrailServiceTests {
 		log.info(trailService.toString());
 		assertNotNull(trailService);
 	}
-	//@Test
+	@Test
 	public void testGetTrailList() {
 		log.info("trail test");
-		trailService.getTrailList().forEach(trail -> log.info(trail.toString()));
+		trailService.getTrailList(new Criteria(3,5)).forEach(trail -> log.info(trail.toString()));
 	}
 	
 	//@Test
@@ -138,7 +139,7 @@ public class TrailServiceTests {
 
 	}
 	
-	@Test
+	//@Test
 	public void testdeleteTrail() {
 		log.info("deleteTrail");
 		Long trailNo = 123L;

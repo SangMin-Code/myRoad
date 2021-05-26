@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.myproject.domain.AttachFileDTO;
 import com.myproject.domain.AttachVO;
+import com.myproject.domain.Criteria;
 import com.myproject.domain.MarkerVO;
 import com.myproject.domain.TrailVO;
 import com.myproject.mapper.AttachMapper;
@@ -35,11 +36,11 @@ public class TrailServiceImpl implements TrailService {
 	
 
 	@Override
-	public List<TrailVO> getTrailList() {
+	public List<TrailVO> getTrailList(Criteria cri) {
 		
-		log.info("trailMapper.getList");
+		log.info("trailMapper.getList with criteria:"+cri);
 		
-		return trailMapper.getList();
+		return trailMapper.getList(cri);
 	}
 	
 	@Override
@@ -155,6 +156,13 @@ public class TrailServiceImpl implements TrailService {
 		int result =trailMapper.trailDelete(trailNo);
 		
 		return result;
+	}
+
+	@Override
+	public int getTotal(Criteria cri) {
+		log.info("get total count");
+
+		return trailMapper.getTotalCount(cri);
 	}
 
 }

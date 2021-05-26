@@ -17,11 +17,11 @@
 							<div class="card shadow mb-4">
 								<div class="card-header py-3" >
 									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">주변 코스 목록</h6>
-									<button id='regBtn' type="button" class="btn btn-xs pull-right" style="float:right">코스 등록하기</button>
+									<button id='regBtn' type="button" class="btn btn-success btn-xs" style="float:right">코스 등록하기</button>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
-										<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+										<table class="table table-bordered" id="WdataTable" width="100%" cellspacing="0">
 											<thead>
 												<tr>
 													<th>#번호</th>
@@ -31,23 +31,25 @@
 													<th>상세보기</th>
 												</tr>
 											</thead>
-											<c:forEach items="${list }" var ="board">
+											<c:forEach items="${list}" var="trail" varStatus="t">
 											<tr>
-												<td><c:out value = "${board.bno}"/></td>
-												<td><a class = 'move' href='<c:out value="${board.bno}"/>'> 
-													<c:out value = "${board.title}"/>
-													<c:if test="${board.replyCnt!=0}">
-														<b>[<c:out value="${board.replyCnt}" />]</b>
-													</c:if>
-													</a></td>
-												<td><c:out value = "${board.writer}"/></td>
-												<td><fmt:formatDate pattern="yyyy-MM-dd" value ="${board.regdate}"/></td>
-												<td></td>
+											<td><c:out value = "${t.count + (pageMaker.cri.pageNum-1)*10}"/></td>
+												<td>
+													<a class = 'move' href='<c:out value="${trail.trailNo}"/>'> 
+														<c:out value = "${trail.title}"/>
+													</a>
+												</td>
+												<td>미정</td>
+												<td><fmt:formatDate pattern="yyyy-MM-dd" value ="${trail.regdate}"/></td>
+												<td><a class = 'move' href='<c:out value="${trail.trailNo}"/>'> 
+														상세보기
+													</a>
+												</td>
 											</tr>
 											</c:forEach>
 										</table>
 										<!-- 코스 검색용 -->
-										<div class='row' style="width:100%;">
+										 <%-- <div class='row' style="width:100%;">
 											<div class='col-lg-7'>
 												<form id='searchForm' action='/board/list' method='get'>
 													<select class = 'custom-select-sm' name='type'>
@@ -65,7 +67,7 @@
 													<button class='btn btn-primary'>Search</button>
 												</form>
 											</div>
-										</div>
+										</div>  --%>
 										
 										
 										<!-- 페이징 -->
@@ -143,11 +145,11 @@
 						</div> <!--div right box-->
 					</div> <!--div row-->
                 </div><!-- /.container-fluid -->
-                <form id='actionForm' action = "/board/list" method ='get'>
+                <form id='actionForm' action = "/trail/list" method ='get'>
                 	<input type ='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
                 	<input type ='hidden' name='amount' value='${pageMaker.cri.amount}'>
-                	<input type ='hidden' name='type' value='<c:out value="${pageMaker.cri.type}"/>'>
-                	<input type ='hidden' name='keyword'value='<c:out value="${pageMaker.cri.keyword}"/>'>
+                <%-- 	<input type ='hidden' name='type' value='<c:out value="${pageMaker.cri.type}"/>'>
+                	<input type ='hidden' name='keyword'value='<c:out value="${pageMaker.cri.keyword}"/>'> --%>
                 </form>
                 
                 
@@ -174,7 +176,7 @@
 		}
 		
 		$("#regBtn").on("click",function(){
-			self.location="/board/register";
+			self.location="/trail/register";
 		});
 		
 		var actionForm = $("#actionForm");
@@ -187,9 +189,9 @@
 		
 		$(".move").on("click",function(e){
 			e.preventDefault();
-			actionForm.append("<input type='hidden' name='bno' value='"+
+			actionForm.append("<input type='hidden' name='trailNo' value='"+
 							$(this).attr("href")+"'>");
-			actionForm.attr("action","/board/get");
+			actionForm.attr("action","/trail/get");
 			actionForm.submit();
 		})
 		

@@ -2,13 +2,17 @@ package com.myproject.mapper;
 
 import java.util.List;
 
+import com.myproject.domain.Criteria;
 import com.myproject.domain.TrailVO;
 
 public interface TrailMapper {
-	//Main Trail 목록
-	public List<TrailVO> getList();
+	// Trail 목록
+	public List<TrailVO> getList(Criteria cri);
 	
-	//Main Trail 등록
+	//total count
+	public int getTotalCount(Criteria cri);
+	
+	// Trail 등록
 	public Long trailInsertSelectKey(TrailVO trail);
 	
 	//Trail 상세

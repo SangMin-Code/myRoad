@@ -2,12 +2,15 @@ package com.myproject.service;
 
 import java.util.List;
 
+import com.myproject.domain.Criteria;
 import com.myproject.domain.TrailVO;
 
 public interface TrailService {
 	
-	//Main Trail List 목록 가져오기
-	public List<TrailVO> getTrailList();
+	// Trail List 목록 가져오기
+	public List<TrailVO> getTrailList(Criteria cri);
+	
+	public int getTotal(Criteria cri);
 	
 	public Long insertSelectKeyTrail(TrailVO trail);
 	

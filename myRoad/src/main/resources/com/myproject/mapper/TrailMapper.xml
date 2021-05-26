@@ -6,7 +6,46 @@
 <mapper namespace="com.myproject.mapper.TrailMapper">
 	<!-- Main 경로 목록  -->
 	<select id="getList" resultType="com.myproject.domain.TrailVO">
-		SELECT *  FROM tbl_trail
+		<![CDATA[
+		select
+			userno
+			,trailno
+			,title
+			,thumnail
+			,content
+			,startlat
+			,startlng
+			,regdate
+		from
+			(
+			select 
+				rownum rn
+				,userno 		
+				,trailno 		
+				,title 		
+				,thumnail 	
+				,content	
+				,startlat	
+				,startlng 	
+				,regdate   
+			from 
+			(
+				select 
+					userno 		
+					,trailno 		
+					,title 		
+					,thumnail 	
+					,content	
+					,startlat	
+					,startlng 	
+					,regdate
+				from tbl_trail order by  trailno
+			)
+			where rownum <= #{pageNum} * #{amount} 
+			)
+		where rn> (#{pageNum}-1)* #{amount}
+		]]>
+		
 	</select>
 	
 	<!--Trail 등록 후 key가져오기  -->
@@ -42,6 +81,10 @@
 	    		 sysdate		<!-- 수정일자 -->
 	    		 )		
 	</insert>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tbl_trail where trailno>0
+	</select>
 	
 	<select id="trailGet" resultType="com.myproject.domain.TrailVO">
 		select

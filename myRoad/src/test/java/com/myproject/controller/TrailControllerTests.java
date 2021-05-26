@@ -36,9 +36,11 @@ public class TrailControllerTests {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
 	
-	//@Test
+	@Test
 	public void testMain() throws Exception{
-		mockMvc.perform(MockMvcRequestBuilders.get("/trail/main"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/trail/list")
+				.param("pageNum","3")
+				.param("amount","5"))
 		.andReturn()
 		.getModelAndView()
 		.getModelMap();
@@ -60,7 +62,7 @@ public class TrailControllerTests {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testgetTrail() throws Exception{
 		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/trail/getTrail")
 				.param("trailNo", "81"))

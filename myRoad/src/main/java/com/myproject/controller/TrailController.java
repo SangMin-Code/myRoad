@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myproject.domain.AttachVO;
+import com.myproject.domain.Criteria;
 import com.myproject.domain.MarkerVO;
+import com.myproject.domain.PageDTO;
 import com.myproject.domain.PathVO;
 import com.myproject.domain.TrailVO;
 import com.myproject.service.MarkerService;
@@ -38,18 +41,24 @@ public class TrailController {
 	private MarkerService markerService;
 	private PathService pathService;
 	
-	@GetMapping("/main")
-	public void main(Model model) {
-		log.info("main");
+	@GetMapping("/list")
+	public void main(Criteria cri ,Model model) {
+		log.info("list"+cri);
 		
-		model.addAttribute("trail",trailService.getTrailList());			
+		model.addAttribute("list",trailService.getTrailList(cri));			
+		
+		int total = trailService.getTotal(cri);
+		
+		log.info("total"+total);
+		
+		model.addAttribute("pageMaker",new PageDTO(cri,total));			
 		
 	}
 	
-	//get
-	@GetMapping("/get")
-	public void get(@RequestParam("trailNo") Long trailNo, Model model) {	
-		log.info("/get");
+	//get,modify
+	@GetMapping({"/get","/modify"})
+	public void get(@RequestParam("trailNo") Long trailNo, @ModelAttribute("cri") Criteria cri, Model model) {	
+		log.info("/get or modify");
 		model.addAttribute("trail",trailService.getTrail(trailNo));
 	}
 	
@@ -91,34 +100,30 @@ public class TrailController {
 				
 		rttr.addFlashAttribute("result", trailSeq);
 		
-		return "redirect:/trail/main";
+		return "redirect:/trail/list";
 		
-	}
-	
-	//modify 화면
-	@GetMapping("/modify")
-	public void modify(@RequestParam("trailNo") Long trailNo, Model model) {	
-		log.info("modify");
-		model.addAttribute("trail",trailService.getTrail(trailNo));
 	}
 	
 	//modify 처리
 	@PostMapping("/modify")
-	public String trailModify(TrailVO trail, RedirectAttributes rttr) {
+	public String trailModify(TrailVO trail,@ModelAttribute("cri") Criteria cri ,RedirectAttributes rttr) {
 			
 	log.info("modify: "+trail);
 	
 	int result =trailService.updateTrail(trail);
 					
 	rttr.addFlashAttribute("result", result);
+	
+	rttr.addAttribute("pageNum",cri.getPageNum());
+	rttr.addAttribute("amount",cri.getAmount());
 			
-	return "redirect:/trail/main";
+	return "redirect:/trail/list";
 			
 	}
 	
 	//delete 처리
 	@PostMapping("/delete")
-	public String traildelete(@RequestParam("trailNo") Long trailNo, RedirectAttributes rttr) {
+	public String traildelete(@RequestParam("trailNo") Long trailNo, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		
 		log.info("delete: "+trailNo);
 		
@@ -137,7 +142,11 @@ public class TrailController {
 		
 		rttr.addFlashAttribute("result", "success");
 		
-		return "redirect:/trail/main";
+		rttr.addAttribute("pageNum",cri.getPageNum());
+
+		rttr.addAttribute("amount",cri.getAmount());
+		
+		return "redirect:/trail/list";
 		
 	}
 	

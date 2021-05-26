@@ -109,10 +109,10 @@
                             		<textarea class ="form-control" rows="3" name='content'></textarea>
                             	</div>
                             	<button type="submit" class="btn btn-success">
-                            		Submit button
+                            		 등록
                             	</button>
-                            	<button type="reset" class="btn btn-success">
-                            		Reset Button
+                            	<button type="reset" id="btnList"class="btn btn-success">
+                            		목록
                             	</button>
                             </form> 
                         </div>
@@ -531,7 +531,7 @@ function appendFileList(result){
 //onload
 $(document).ready(function(e){
     var formObj = $("form[role='trail_form']");
-
+	
     $("#addLine").on("click",function(e){
         e.preventDefault();
         kakao.maps.event.removeListener(map, 'click', makeMarker);
@@ -594,6 +594,10 @@ $(document).ready(function(e){
     	    	
     });
     
+    
+    $("#btnList").on("click",function(e){
+    	self.location="/trail/list"
+    })
 
     $("button[type='submit']").on("click",function(e){
          e.preventDefault();               

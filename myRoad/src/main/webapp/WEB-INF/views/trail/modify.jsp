@@ -92,6 +92,8 @@
                                 <input type="hidden" name="userNo" value='<c:out value="${trail.userNo}"/>'/>
                                 <input type="hidden" name="thumnail" value='<c:out value="${trail.thumnail}"/>'/>
                                 <input type ="hidden" name ="trailNo" value ='<c:out value="${trail.trailNo}"/>'/>
+                                <input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum }"/>'>                        
+                        		<input type='hidden' name='amount' value='<c:out value="${cri.amount }"/>'>  
                                 
                                 <div class="form-group">
                             		<label>제목</label>
@@ -655,13 +657,13 @@ $(document).ready(function(e){
 		}
 		else if(operation==='list'){
 			formObj.attr("action","/trail/list").attr("method","get");
-			//var pageNumTag=$("input[name='pageNum']").clone();
-			//var amountTag=$("input[name='amount']").clone();
+			var pageNumTag=$("input[name='pageNum']").clone();
+			var amountTag=$("input[name='amount']").clone();
 			//var keywordTag=$("input[name='keyword']").clone();
 			//var typeTag=$("input[name='type']").clone();
 			formObj.empty();
-			//formObj.append(pageNumTag);
-			//formObj.append(amountTag);
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 			//formObj.append(keywordTag);
 			//formObj.append(typeTag);
 			
@@ -685,7 +687,6 @@ $(document).ready(function(e){
 		             	}
 	             	}
 	         }
-	        console.log(str)
 	        
 			formObj.append(str)
 		}

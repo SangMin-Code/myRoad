@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.myproject.domain.Criteria;
 import com.myproject.domain.TrailVO;
 import com.myproject.mapper.TrailMapper;
 import com.myproject.mapper.SampleMapper;
@@ -30,10 +31,13 @@ public class TrailMapperTests {
 		log.info(mapper.getTime());
 	}
 	
-	//@Test
+	@Test
 	//Trail Main
 	public void testGetList() { 
-		trailMapper.getList().forEach(trail -> log.info(trail));
+		Criteria cri = new Criteria();
+		cri.setPageNum(2);
+		cri.setAmount(5);
+		trailMapper.getList(cri).forEach(trail -> log.info(trail));
 	}
 	
 	//@Test
@@ -80,7 +84,7 @@ public class TrailMapperTests {
 		
 	}
 	
-	@Test
+	//@Test
 	//Train TrailDelete
 	public void testTrailDelete() {
 		

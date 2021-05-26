@@ -76,13 +76,11 @@
                             <h6 class="m-0 font-weight-bold text-primary">Trail Register</h6>
                         </div>
                         <div class="card-body">
-                            <form role ="trail_form" action="/trail/register" method="post">
-                                <input type="hidden" name="userNo" value='<c:out value="${trail.userNo}"/>'/>
-                                <input type="hidden" name="startLat" value='<c:out value="${trail.startLat}"/>'/>
-                                <input type="hidden" name="startLng" value='<c:out value="${trail.startLng}"/>'/>
-                                <input type="hidden" name="endLat" value='<c:out value="${trail.endLat}"/>'/>
-                                <input type="hidden" name="endLng" value='<c:out value="${trail.endLng}"/>'/>
-                                <input type="hidden" name="thumnail" value='<c:out value="${trail.thumnail}"/>'/>
+                            <form id ="operForm" action="/trail/modify" method="get">
+                                <input type="hidden" id="trailNo" name="trailNo" value='<c:out value="${trail.trailNo}"/>'/>
+                                <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'/>
+                                <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'/>
+                            </form> 
                                 
                                 <div class="form-group">
                             		<label>제목</label>
@@ -92,15 +90,13 @@
                             		<label>내용</label>
                             		<textarea class ="form-control" rows="3" name='content' readonly ="readonly"><c:out value="${trail.content}"/></textarea>
                             	</div>
-                            	
-                            	<button type="submit" class="btn btn-success">
-                            		Submit button
+                            	<button data-oper='modify' class="btn btn-success">
+                            		수정
                             	</button>
-                            	<button type="reset" class="btn btn-success">
-                            		Reset Button
+                            	<button data-oper='list' class="btn btn-info">
+                            		목록
                             	</button>
                             	
-                            </form> 
                         </div>
                     </div>
                 </div>
@@ -449,7 +445,16 @@ $(document).ready(function(e){
 		}
 	})
 	
-    var formObj = $("form[role='trail_form']");    
+	var operForm = $("#operForm");
+	$("button[data-oper='modify']").on("click",function(e){
+		operForm.attr("action","/trail/modify").submit();
+	})
+	
+	$("button[data-oper='list']").on("click",function(e){
+		operForm.find('#trailNo').remove();
+		operForm.attr("action","/trail/list");
+		operForm.submit();
+	});
 
     /*for_test*/
     if($("input[name='userNo']").val()=="" || $("input[name='userNo']").val()==null){
