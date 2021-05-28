@@ -19,7 +19,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Trail</h1>
+                    <h1 class="h3 mb-2 text-gray-800">코스 보기</h1>
                     <p class="mb-4"></p>
 					
 					<!-- map -->                   
@@ -28,7 +28,7 @@
                     		<!-- 주변 코스 목록 -->
 							<div class= "card shadow mb-4">
                         <div class="card-header py-3">
-                            <h7 class= "m-0 font-weight-bold text-primary">Map</h7>
+                            <h7 class= "m-0 font-weight-bold text-primary">지도</h7>
                         </div>
                         <div class="card-body">
                             <div id="map" style="width:100%;height:730px;"></div>  
@@ -44,11 +44,11 @@
 								<div class="card-body">
 									<form role ="marker_form" method="post">
                                         <div class="form-group">
-                                            <label>Title</label>
+                                            <label>장소 이름</label>
                                             <input class ="form-control" id="markerTitle" readonly="readonly">
                                         </div>
                                         <div class="form-group">
-                                            <label>Text area</label>
+                                            <label>내용</label>
                                             <textarea class ="form-control" rows="3" id='markerContent' readonly="readonly"></textarea>
                                         </div>
 		                            	<input type="hidden" id="markerIdx" value="0"/>
@@ -60,7 +60,33 @@
 								<div class="card-header py-3" >
 									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">갤러리</h6>
 								</div>
-								<div class="card-body" style="overflow:auto; height:400px">
+								<div class="card-body" style="overflow:auto; height:420px">
+									<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:400px">
+									  <ol class="carousel-indicators">
+								    	<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+								    	<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+								    	<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+								  	</ol>
+								  <div class="carousel-inner">
+								    <div class="carousel-item active">
+								      <img class="d-block" src="/resources/img/undraw_profile_1.svg" alt="First slide">
+								    </div>
+								    <div class="carousel-item">
+								      <img class="d-block" src="/resources/img/undraw_profile_2.svg" alt="Second slide">
+								    </div>
+								    <div class="carousel-item">
+								      <img class="d-block" src="/resources/img/undraw_profile_3.svg" alt="Third slide">
+								    </div>
+								  </div>
+									  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+									    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									    <span class="sr-only">Previous</span>
+									  </a>
+									  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+									    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+									    <span class="sr-only">Next</span>
+									  </a>
+									</div>
 		                            <div class ="uploadResult">
 		                                <ul class="list-group">
 		                                </ul>
@@ -73,7 +99,7 @@
                     <!-- trail 제목, 내용 -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Trail Register</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">코스 정보</h6>
                         </div>
                         <div class="card-body">
                             <form id ="operForm" action="/trail/modify" method="get">
@@ -413,7 +439,6 @@ function makeMarker(markerArr){
 
 //onload
 $(document).ready(function(e){
-	
 
 	//PathList 읽어오기
 	$.ajax({
@@ -460,8 +485,6 @@ $(document).ready(function(e){
     if($("input[name='userNo']").val()=="" || $("input[name='userNo']").val()==null){
         	$("input[name='userNo']").val(1);
     }
-	
-
 })
 //onload end
 </script>

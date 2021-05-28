@@ -19,7 +19,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Trail Register</h1>
+                    <h1 class="h3 mb-2 text-gray-800">코스 등록하기</h1>
                     <p class="mb-4"></p>
 					
 					<!-- map -->                   
@@ -28,7 +28,7 @@
                     		<!-- 주변 코스 목록 -->
 							<div class= "card shadow mb-4">
                         <div class="card-header py-3">
-                            <h7 class= "m-0 font-weight-bold text-primary">Make Trail</h7>
+                            <h7 class= "m-0 font-weight-bold text-primary">코스 만들기</h7>
 							<button id="addMarker"class="btn btn-success float-right mr-1">
 	                            마커 추가
 	                        </button>
@@ -51,11 +51,11 @@
 									<form role ="marker_form" method="post">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <div class="form-group">
-                                            <label>Title</label>
+                                            <label>장소 이름</label>
                                             <input class ="form-control" id="markerTitle">
                                         </div>
                                         <div class="form-group">
-                                            <label>Text area</label>
+                                            <label>내용</label>
                                             <textarea class ="form-control" rows="3" id='markerContent'></textarea>
                                         </div>
                                         <button type="button" class="btn btn-success" id="markerSaveBtn">
@@ -89,7 +89,7 @@
                     <!-- trail 제목, 내용 -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Trail Register</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">코스 등록하기</h6>
                         </div>
                         <div class="card-body">
                             <form role ="trail_form" action="/trail/register" method="post">

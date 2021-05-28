@@ -9,14 +9,14 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Main</h1>
+                    <h1 class="h3 mb-2 text-gray-800">코스 목록</h1>
                     <p class="mb-4"></p>
 					<div class="row">
 						<div class="col-xl-8 col-lg-7"> <!--left box-->
                     		<!-- 주변 코스 목록 -->
 							<div class="card shadow mb-4">
 								<div class="card-header py-3" >
-									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">주변 코스 목록</h6>
+									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">코스 목록</h6>
 									<button id='regBtn' type="button" class="btn btn-success btn-xs" style="float:right">코스 등록하기</button>
 								</div>
 								<div class="card-body">
@@ -24,11 +24,11 @@
 										<table class="table table-bordered" id="WdataTable" width="100%" cellspacing="0">
 											<thead>
 												<tr>
-													<th>#번호</th>
+													<th>번호</th>
 													<th>제목</th>
 													<th>작성자</th>
 													<th>작성일</th>
-													<th>상세보기</th>
+													<!-- <th>상세보기</th> -->
 												</tr>
 											</thead>
 											<c:forEach items="${list}" var="trail" varStatus="t">
@@ -41,10 +41,10 @@
 												</td>
 												<td>미정</td>
 												<td><fmt:formatDate pattern="yyyy-MM-dd" value ="${trail.regdate}"/></td>
-												<td><a class = 'move' href='<c:out value="${trail.trailNo}"/>'> 
+												<%-- <td><a class = 'move' href='<c:out value="${trail.trailNo}"/>'> 
 														상세보기
 													</a>
-												</td>
+												</td> --%>
 											</tr>
 											</c:forEach>
 										</table>
@@ -113,36 +113,7 @@
 									</div>
 								</div>
 							</div>
-							<!-- 지도 -->
-							<div class="card shadow mb-4">
-								<div class="card-header py-3" >
-									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">지도</h6>
-								</div>
-								<div class="card-body">
-									<div class="map">카카오지도</div>
-								</div>
-							</div>
 						</div> <!--div left box-->
-						<div class="col-xl-4 col-lg-5"> <!--right box-->
-                    		<!-- 주변 코스 썸네일 -->
-							<div class="card shadow mb-4">
-								<div class="card-header py-3" >
-									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">썸네일</h6>
-								</div>
-								<div class="card-body">
-									<div>사진</div>	
-								</div>
-							</div>
-							<!--스팟 정보 (text, img) 스팟정보 양식필요-->
-							<div class="card shadow mb-4">
-								<div class="card-header py-3" >
-									<h6 class="m-0 mt-2 font-weight-bold text-primary" style="width:50%; float:left">이름미정</h6>
-								</div>
-								<div class="card-body">
-									<div>스팟정보</div>
-								</div>
-							</div>
-						</div> <!--div right box-->
 					</div> <!--div row-->
                 </div><!-- /.container-fluid -->
                 <form id='actionForm' action = "/trail/list" method ='get'>
