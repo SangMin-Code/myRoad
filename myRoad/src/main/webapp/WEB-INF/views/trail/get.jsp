@@ -63,20 +63,8 @@
 								<div class="card-body" style="overflow:auto; height:420px">
 									<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:400px">
 									  <ol class="carousel-indicators">
-								    	<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-								    	<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-								    	<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-								  	</ol>
+								  	  </ol>
 								  <div class="carousel-inner">
-								    <div class="carousel-item active">
-								      <img class="d-block" src="/resources/img/undraw_profile_1.svg" alt="First slide">
-								    </div>
-								    <div class="carousel-item">
-								      <img class="d-block" src="/resources/img/undraw_profile_2.svg" alt="Second slide">
-								    </div>
-								    <div class="carousel-item">
-								      <img class="d-block" src="/resources/img/undraw_profile_3.svg" alt="Third slide">
-								    </div>
 								  </div>
 									  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 									    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -87,10 +75,6 @@
 									    <span class="sr-only">Next</span>
 									  </a>
 									</div>
-		                            <div class ="uploadResult">
-		                                <ul class="list-group">
-		                                </ul>
-		                            </div>
                         		</div>
 							</div>
 						</div> <!--div right box-->
@@ -292,22 +276,35 @@ var paths = []
 
 function showUploadResult(uploadResultArr){
     var uploadUL = $(".uploadResult ul");
-    var str = "";
+    var carIindicators = $(".carousel-indicators")
+    var carInner=$(".carousel-inner")
+    
+    var indicators_str = "";
+    var inner_str = "";
     
 	if(!uploadResultArr||uploadResultArr.length==0){
-		uploadUL.html(str)
+		carIindicators.html(indicators_str)
+		carInner.html(inner_str)
+		
 		return;
-		}
-    
-    $(uploadResultArr).each(function(i,obj){
-            var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName)
-            str+="<li class='list-group-item' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-fileName='"+obj.fileName+"'"; 
-            str+=" data-type='"+obj.image+"'><div>";
-            str+= "<span>"+obj.fileName+"</span>";
-            str+="<img class='ml-2' src='/display?fileName="+fileCallPath+"'>";
-            str+="</div></li>"
+	}    
+	
+	console.log(uploadResultArr)
+	$(uploadResultArr).each(function(i,obj){
+            //var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName)
+            var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName)
+            indicators_str+="<li data-target='#carouselExampleIndicators' data-slide-to="+i+" class='active'></li>"
+            
+            if(i==0){
+            	inner_str+="<div class='carousel-item active'>"
+            }else{
+            	inner_str+="<div class='carousel-item'>"
+            }
+            inner_str+="<img class='d-block w-100' src='/display?fileName="+fileCallPath+"'>"
+            inner_str+="</div>"
     });
-    uploadUL.html(str);
+	carIindicators.html(indicators_str)
+	carInner.html(inner_str)
 }
 
 function makePath(pathArr){
