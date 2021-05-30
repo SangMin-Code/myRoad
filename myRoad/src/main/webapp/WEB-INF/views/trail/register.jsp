@@ -149,14 +149,26 @@ function makeMarker(mouseEvent){
        	
         var data = {lat:latlng.getLat()
         			,lng:latlng.getLng()
-        			,title:"hello"
-        			,content:"it's me"+markerIdx
+        			,title:""
+        			,content:""
         			,markerNo:-1
         			,state:"I"
         			}
+        
+        var iwContent = '<div class="dotOverlay">'+data.title+'</div>'
+
+    	// 인포윈도우를 생성합니다
+    	var infoWindow = new kakao.maps.CustomOverlay({
+    		map: map,
+    		position : latlng, 
+        	content : iwContent,
+        	zIndex:1000,
+        	yAnchor: 2 
+    	});
+        
         markerIdx++;
         
-        markers.push({"data":data,"marker":marker})    
+        markers.push({"data":data,"marker":marker,"infoWindow":infoWindow})    
         
         //마커 왼쪽 클릭 시 스팟 정보 뿌리기
         kakao.maps.event.addListener(marker, 'click', function() {
@@ -166,7 +178,11 @@ function makeMarker(mouseEvent){
         			$("#markerContent").val(markers[i].data.content)
         			$("#markerIdx").val(marker.getTitle())
         			showUploadResult(markers[i].data.files)
+        			markers[i].marker.setOpacity(1)
+        		}else{
+        			markers[i].marker.setOpacity(0.5)
         		}
+        		markers[i].marker.setMap(map);
         	}
       	});
         
@@ -182,6 +198,8 @@ function makeMarker(mouseEvent){
         		}
         	}
 			markers[d_idx].marker.setMap(null)
+			markers[d_idx].infoWindow.setMap(null)
+			
         	markers.splice(d_idx,1)
         	
         	$("#markerTilte").val(null)
@@ -191,14 +209,12 @@ function makeMarker(mouseEvent){
         	
       	});
         
+		for (var i = 0; i < markers.length-1; i++) {
+			markers[i].marker.setOpacity(0.5)
+			markers[i].marker.setMap(map);
+	    }
         // 지도에 마커를 표시합니다
         marker.setMap(map);
-    
-        /* var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-        message += '경도는 ' + latlng.getLng() + ' 입니다';
-        
-        console.log(message) */
-        
        
     }
 
@@ -561,6 +577,8 @@ $(document).ready(function(e){
     		if(markers[i].marker.getTitle()==idx){
     			markers[i].data.title = $("#markerTitle").val()
     			markers[i].data.content = $("#markerContent").val()
+    			markers[i].infoWindow.setContent('<div class="dotOverlay">'+$("#markerTitle").val().substr(0,7)+'</div>')
+				markers[i].infoWindow.setMap(map);
     			break
     		}    			
     	}
@@ -586,6 +604,7 @@ $(document).ready(function(e){
        		}
        	}
 		markers[d_idx].marker.setMap(null)
+		markers[d_idx].infoWindow.setMap(null)
        	markers.splice(d_idx,1)
        	
        	$("#markerTilte").val(null)

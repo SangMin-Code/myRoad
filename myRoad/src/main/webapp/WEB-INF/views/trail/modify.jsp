@@ -121,7 +121,7 @@
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(<c:out value="${trail.startLat}"/>, <c:out value="${trail.startLng}"/>), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -140,7 +140,8 @@ function makeMarker(mouseEvent){
     title:markerIdx
     }); 
        	
-    var data = {lat:latlng.getLat()
+    var data = {
+    			lat:latlng.getLat()
      			,lng:latlng.getLng()
       			,title:""
       			,content:"test"+markerIdx
@@ -148,9 +149,20 @@ function makeMarker(mouseEvent){
       			,state:"I"
      			}
     
+    var iwContent = '<div class="dotOverlay">'+data.title+'</div>'
+
+	// 인포윈도우를 생성합니다
+	var infoWindow = new kakao.maps.CustomOverlay({
+		map: map,
+		position : latlng, 
+    	content : iwContent,
+    	zIndex:1000,
+    	yAnchor: 2 
+	});
+    
     markerIdx++;
         
-    markers.push({"data":data,"marker":marker})    
+    markers.push({"data":data,"marker":marker,"infoWindow":infoWindow})    
         
     //마커 왼쪽 클릭 시 스팟 정보 뿌리기
     kakao.maps.event.addListener(marker, 'click', function() {
@@ -160,10 +172,12 @@ function makeMarker(mouseEvent){
             $("#markerTitle").val(markers[i].data.title)
         	$("#markerContent").val(markers[i].data.content)
         	$("#markerIdx").val(marker.getTitle())
-        	
         	showUploadResult(markers[i].data.files)
-        	break;
-        	}
+        	markers[i].marker.setOpacity(1)
+        }else{
+        	markers[i].marker.setOpacity(0.5)
+        }
+        markers[i].marker.setMap(map);
         }
       });
         
@@ -180,6 +194,7 @@ function makeMarker(mouseEvent){
         	}
 		markers[d_idx].marker.setMap(null)
         markers[d_idx].data.state="D"
+        markers[d_idx].infoWindow.setMap(null)
         	
         $("#markerTilte").val(null)
         $("#markerContent").val(null)
@@ -187,6 +202,11 @@ function makeMarker(mouseEvent){
         	
         	
       	});
+    
+		for (var i = 0; i < markers.length-1; i++) {
+			markers[i].marker.setOpacity(0.5)
+			markers[i].marker.setMap(map);
+	    }
         
         // 지도에 마커를 표시합니다
         marker.setMap(map);
@@ -493,6 +513,18 @@ function makeReadMarker(markerArr){
     		,clickable:true
     		,title:markerIdx
 			,zIndex:999
+			,opacity:0.5
+    	});
+    	
+    	var iwContent = '<div class="dotOverlay">'+title.substr(0,7)+'</div>'
+    	
+    	// 인포윈도우를 생성합니다
+    	var infoWindow = new kakao.maps.CustomOverlay({
+    		map: map,
+    		position : latlng, 
+        	content : iwContent,
+        	zIndex:1000,
+        	yAnchor: 2 
     	});
     	
     	var data = {
@@ -506,17 +538,20 @@ function makeReadMarker(markerArr){
     	}
     	markerIdx++;
     	
-    	markers.push({"data":data,"marker":marker})
+    	markers.push({"data":data,"marker":marker,"infoWindow":infoWindow})
 	
     	kakao.maps.event.addListener(marker, 'click', function() {
-    	for (var j = 0; j < markers.length; j ++) {
-    		if (markers[i].marker.getTitle()==marker.getTitle()){
-    			$("#markerTitle").val(markers[i].data.title)
-    			$("#markerContent").val(markers[i].data.content)
-    			$("#markerIdx").val(marker.getTitle())
-    			showUploadResult(markers[i].data.files)
-    		}
-    	}
+	    	for (var j = 0; j < markers.length; j ++) {
+	    		if (markers[j].marker.getTitle()==marker.getTitle()){
+	    			$("#markerTitle").val(markers[j].data.title)
+	    			$("#markerContent").val(markers[j].data.content)
+	    			$("#markerIdx").val(marker.getTitle())
+	    			showUploadResult(markers[j].data.files)
+	    			markers[j].marker.setOpacity(1)
+	    		}else{
+	    			markers[j].marker.setOpacity(0.5)
+	    		}
+	    	}
   		}); 
     	
 	});//arr
@@ -561,7 +596,6 @@ $(document).ready(function(e){
 		,dataType:'json'
 		,success:function(result){
 			makePath(result)
-			console.log(paths)
 		}
 		,error:function(error){
 			console.log(error)
@@ -577,6 +611,10 @@ $(document).ready(function(e){
 		,dataType:'json'
 		,success:function(result){
 			makeReadMarker(result)
+			if(markers.length>0){
+				kakao.maps.event.trigger(markers[0].marker, 'click',function(){
+				});				
+			}
 		}
 		,error:function(error){
 			console.log(error)
@@ -610,6 +648,8 @@ $(document).ready(function(e){
     			if (markers[i].data.state=="R"){
     				markers[i].data.state="U"
     			}
+    			markers[i].infoWindow.setContent('<div class="dotOverlay">'+$("#markerTitle").val().substr(0,10)+'</div>')
+				markers[i].infoWindow.setMap(map);
     			break
     		}    			
     	}
@@ -619,7 +659,6 @@ $(document).ready(function(e){
     
     //스팟 삭제
      $("#markerDelBtn").on("click",function(e){
-    	console.log($("#markerIdx").val())
     	 
     	if($("#markerIdx").val()==0 || $("#markerIdx").val()==null || $("#markerIdx").val()==""){
     		alert("마커를 선택해주세요.")
@@ -636,6 +675,7 @@ $(document).ready(function(e){
        	}
 		markers[d_idx].marker.setMap(null)
 		markers[d_idx].data.state="D"
+		markers[d_idx].infoWindow.setMap(null)
        	
        	$("#markerTilte").val(null)
        	$("#markerContent").val(null)
@@ -711,7 +751,6 @@ $(document).ready(function(e){
             }
             formData.append("uploadFile",files[i]);
         }
-		console.log(files)
 		
 	    $.ajax({
 	        url:'/uploadAjaxAction',

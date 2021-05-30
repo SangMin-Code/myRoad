@@ -12,6 +12,7 @@
 .distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
 .distanceInfo .label {display:inline-block;width:50px;}
 .distanceInfo:after {content:none;}
+.infoWindow{width:150px;text-align:center;padding:6px 0;border-radius:6px;}
 </style>
 <%@include file ="/WEB-INF/views/includes/header.jsp" %>
 
@@ -114,29 +115,10 @@
 
 <!-- map -->
 <script>
-var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
-MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
-OFFSET_X = 12, // 기본, 클릭 마커의 기준 X좌표
-OFFSET_Y = MARKER_HEIGHT, // 기본, 클릭 마커의 기준 Y좌표
-OVER_MARKER_WIDTH = 40, // 오버 마커의 너비
-OVER_MARKER_HEIGHT = 42, // 오버 마커의 높이
-OVER_OFFSET_X = 13, // 오버 마커의 기준 X좌표
-OVER_OFFSET_Y = OVER_MARKER_HEIGHT, // 오버 마커의 기준 Y좌표
-SPRITE_MARKER_URL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites2.png', // 스프라이트 마커 이미지 URL
-SPRITE_WIDTH = 126, // 스프라이트 이미지 너비
-SPRITE_HEIGHT = 146, // 스프라이트 이미지 높이
-SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
-
-var markerSize = new kakao.maps.Size(MARKER_WIDTH, MARKER_HEIGHT), // 기본, 클릭 마커의 크기
-markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y), // 기본, 클릭 마커의 기준좌표
-overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT), // 오버 마커의 크기
-overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y), // 오버 마커의 기준 좌표
-spriteImageSize = new kakao.maps.Size(SPRITE_WIDTH, SPRITE_HEIGHT); // 스프라이트 이미지의 크기
-
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(<c:out value="${trail.startLat}"/>, <c:out value="${trail.startLng}"/>), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -309,7 +291,6 @@ function showUploadResult(uploadResultArr){
 		return;
 	}    
 	
-	console.log(uploadResultArr)
 	$(uploadResultArr).each(function(i,obj){
             //var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName)
             var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName)
@@ -403,7 +384,7 @@ function makePath(pathArr){
 	
 }
 
-function makeMarker(markerArr){
+function makeReadMarker(markerArr){
 	if(!markerArr||markerArr.length==0){
 		return;
 	}
@@ -421,6 +402,18 @@ function makeMarker(markerArr){
     		,clickable:true
     		,title:markeridx
 			,zIndex:999
+			,opacity:0.5
+    	});
+    	
+    	var iwContent = '<div class="dotOverlay">'+title.substr(0,7)+'</div>'
+
+    	// 인포윈도우를 생성합니다
+    	var infoWindow = new kakao.maps.CustomOverlay({
+    		map: map,
+    		position : latlng, 
+        	content : iwContent,
+        	zIndex:1000,
+        	yAnchor: 2 
     	});
     	
     	var data = {
@@ -437,14 +430,17 @@ function makeMarker(markerArr){
     	markers.push({"data":data,"marker":marker})
 	
     	kakao.maps.event.addListener(marker, 'click', function() {
-    	for (var j = 0; j < markers.length; j ++) {
-    		if (markers[i].marker.getTitle()==marker.getTitle()){
-    			$("#markerTitle").val(markers[i].data.title)
-    			$("#markerContent").val(markers[i].data.content)
-    			$("#markerIdx").val(marker.getTitle())
-    			showUploadResult(markers[i].data.files)
-    		}
-    	}
+	    	for (var j = 0; j < markers.length; j ++) {
+	    		if (markers[j].marker.getTitle()==marker.getTitle()){
+	    			$("#markerTitle").val(markers[j].data.title)
+	    			$("#markerContent").val(markers[j].data.content)
+	    			$("#markerIdx").val(marker.getTitle())
+	    			showUploadResult(markers[j].data.files)
+	    			markers[j].marker.setOpacity(1)
+	    		}else{
+	    			markers[j].marker.setOpacity(0.5)
+	    		}
+	    	}
   		}); 
     	
 	});//arr
@@ -465,7 +461,6 @@ $(document).ready(function(e){
 		,dataType:'json'
 		,success:function(result){
 			makePath(result)
-			console.log(paths)
 		}
 		,error:function(error){
 			console.log(error)
@@ -480,7 +475,11 @@ $(document).ready(function(e){
 		,type:'GET'
 		,dataType:'json'
 		,success:function(result){
-			makeMarker(result)
+			makeReadMarker(result)
+			if(markers.length>0){
+				kakao.maps.event.trigger(markers[0].marker, 'click',function(){
+				});				
+			}
 		}
 		,error:function(error){
 			console.log(error)
@@ -503,6 +502,7 @@ $(document).ready(function(e){
         	$("input[name='userNo']").val(1);
     }
 })
+
 //onload end
 </script>
 
