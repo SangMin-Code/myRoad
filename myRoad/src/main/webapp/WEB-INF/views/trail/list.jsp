@@ -39,7 +39,7 @@
 														<c:out value = "${trail.title}"/>
 													</a>
 												</td>
-												<td>미정</td>
+												<td>Test</td>
 												<td><fmt:formatDate pattern="yyyy-MM-dd" value ="${trail.regdate}"/></td>
 												<%-- <td><a class = 'move' href='<c:out value="${trail.trailNo}"/>'> 
 														상세보기
@@ -92,7 +92,7 @@
 										
 										
 										<!-- Modal (등록 후 메인으로 이동 시) -->
-										<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel"
+										<!-- <div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel"
 											aria-hidden="true">
 											<div class="modal-dialog">
 												<div class="modal-content">
@@ -109,7 +109,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -129,22 +129,8 @@
 	$(document).ready(function(){
 		var result = '<c:out value="${result}"/>';
 		
-		checkModal(result);
-		
+		//checkModal(result);
 		//history.replaceState({},null,null); TODO : 모달문제처리
-		
-		function checkModal(result){
-			
-			if(result ===''
-					//|| hisotry.state
-					){
-				return;
-			}
-			if(parseInt(result)>0){
-				$(".modal-body").html("게시글 "+parseInt(result)+" 번이 등록되었습니다.");
-			}
-			$("#MyModal").modal("show");
-		}
 		
 		$("#regBtn").on("click",function(){
 			self.location="/trail/register";
@@ -181,6 +167,19 @@
 			searchForm.submit();
 		})
 	});
+	
+function checkModal(result){
+	
+	if(result ===''
+			//|| hisotry.state
+			){
+		return;
+	}
+	if(parseInt(result)>0){
+		$(".modal-body").html("게시글 "+parseInt(result)+" 번이 등록되었습니다.");
+	}
+	$("#MyModal").modal("show");
+}
 	
 </script>
                 

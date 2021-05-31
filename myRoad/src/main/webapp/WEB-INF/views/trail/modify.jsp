@@ -177,7 +177,10 @@ function makeMarker(mouseEvent){
         }else{
         	markers[i].marker.setOpacity(0.5)
         }
-        markers[i].marker.setMap(map);
+	    if (markers[i].data.state !="D"){
+		    markers[i].marker.setMap(map);
+	      	
+	        }
         }
       });
         
@@ -205,7 +208,9 @@ function makeMarker(mouseEvent){
     
 		for (var i = 0; i < markers.length-1; i++) {
 			markers[i].marker.setOpacity(0.5)
-			markers[i].marker.setMap(map);
+			if(markers[i].data.state !="D"){
+				markers[i].marker.setMap(map);
+			}
 	    }
         
         // 지도에 마커를 표시합니다
@@ -557,7 +562,7 @@ function makeReadMarker(markerArr){
 	});//arr
 	
 	for (var i = 0; i < markers.length; i++) {
-		markers[i].marker.setMap(map);
+			markers[i].marker.setMap(map);
     }   
 }
 

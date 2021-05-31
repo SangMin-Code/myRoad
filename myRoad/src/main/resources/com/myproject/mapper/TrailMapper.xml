@@ -39,7 +39,7 @@
 					,startlat	
 					,startlng 	
 					,regdate
-				from tbl_trail order by  trailno
+				from tbl_trail order by  trailno desc
 			)
 			where rownum <= #{pageNum} * #{amount} 
 			)
