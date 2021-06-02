@@ -13,4 +13,5 @@ public interface AttachMapper {
 	
 	public void deleteByMarkerNo(Long markerNo);
 	
+	public List<AttachVO> getOldFiles();
 }

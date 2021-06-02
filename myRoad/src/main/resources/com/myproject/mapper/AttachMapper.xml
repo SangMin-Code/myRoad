@@ -41,7 +41,9 @@
 		 tbl_attach where markerno = #{markerNo}
 	</select>
 	
-
+	<select id="getOldFiles" resultType="com.myproject.domain.AttachVO">
+		select * from tbl_attach where uploadpath = to_char(sysdate-1,'yyyy\mm\dd')
+	</select>
 	
 	
 
